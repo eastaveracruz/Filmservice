@@ -2,7 +2,7 @@ package filmservice.repository;
 
 import filmservice.model.Film;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface FilmRepository {
 
@@ -12,6 +12,6 @@ public interface FilmRepository {
 
     Film get(int id);
 
-    Collection<Film> getAll();
+    List<Film> getAll();
 
 }

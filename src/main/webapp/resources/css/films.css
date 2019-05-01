@@ -1,0 +1,32 @@
+body {
+    font-family: Arial, sans-serif
+}
+
+#user_name {
+    color: orangered
+}
+
+.name {
+    margin-bottom: 25px
+}
+
+#search {
+    width: 400px;
+    margin: 0px;
+    padding: 0px;
+    display: flow;
+    float: left;
+}
+
+#login {
+    float: right
+}
+
+#menu {
+    margin-bottom: 30px;
+}
+
+#cross {
+    text-decoration: none;
+    color: darkred;
+}

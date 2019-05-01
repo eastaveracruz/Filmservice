@@ -4,15 +4,26 @@
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <display-name>Filmservice</display-name>
+    <!--<display-title>Filmservice</display-title>-->
 
+    <!--<servlet>-->
+        <!--<servlet-title>filmServlet</servlet-title>-->
+        <!--<servlet-class>filmservice.web.FilmServlet</servlet-class>-->
+        <!--<load-on-startup>0</load-on-startup>-->
+    <!--</servlet>-->
+    <!---->
+    <!--<servlet-mapping>-->
+        <!--<servlet-title>filmServlet</servlet-title>-->
+        <!--<url-pattern>/films</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <display-name>FilmsService</display-name>
+    
     <servlet>
-        <servlet-name>filmServlet</servlet-name>
+        <servlet-name>filmsServlet</servlet-name>
         <servlet-class>filmservice.web.FilmServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>filmServlet</servlet-name>
+        <servlet-name>filmsServlet</servlet-name>
         <url-pattern>/films</url-pattern>
     </servlet-mapping>
 
