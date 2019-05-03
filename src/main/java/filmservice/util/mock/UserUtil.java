@@ -15,6 +15,7 @@ public class UserUtil {
         for (int i = 0; i < 5; i++) {
             userList.add(new User(i, "User " + i));
         }
+        userList.add(new User(6 , "Admin"));
     }
 
     public static List<User> getUserList() {

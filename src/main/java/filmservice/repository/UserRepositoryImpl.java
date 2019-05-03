@@ -2,14 +2,9 @@ package filmservice.repository;
 
 import filmservice.model.User;
 import filmservice.util.mock.UserUtil;
-import netscape.security.UserTarget;
 import org.springframework.stereotype.Repository;
 
-import javax.rmi.CORBA.Util;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
