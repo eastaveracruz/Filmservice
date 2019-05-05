@@ -1,13 +1,15 @@
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS films;
-DROP SEQUENCE IF EXISTS global_seq;
+DROP SEQUENCE IF EXISTS user_seq;
+DROP SEQUENCE IF EXISTS film_seq;
 
-CREATE SEQUENCE global_seq START WITH 1;
+CREATE SEQUENCE user_seq START WITH 1;
+CREATE SEQUENCE film_seq START WITH 1;
 
 CREATE TABLE users
 (
-  id           INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+  id           INTEGER PRIMARY KEY DEFAULT nextval('user_seq'),
   login             VARCHAR                 NOT NULL,
   password         VARCHAR
 );
@@ -22,7 +24,7 @@ CREATE TABLE user_roles
 
 CREATE TABLE films
 (
-  id SERIAL PRIMARY KEY ,
+  id INTEGER PRIMARY KEY DEFAULT nextval('film_seq'),
   title             VARCHAR                 NOT NULL,
   image             VARCHAR                 NOT NULL,
   description             VARCHAR                 NOT NULL,

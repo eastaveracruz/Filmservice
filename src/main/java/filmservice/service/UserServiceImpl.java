@@ -5,6 +5,7 @@ import filmservice.repository.UserRepository;
 import filmservice.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        Assert.notNull(user, "user must be not null");
         return repository.save(user);
     }
 
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) {
+        Assert.notNull(user, "user must be not null");
         checkNotFoundWithId(repository.save(user), user.getId());
     }
 

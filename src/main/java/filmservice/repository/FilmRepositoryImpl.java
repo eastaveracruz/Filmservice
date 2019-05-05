@@ -1,32 +1,51 @@
 package filmservice.repository;
 
 import filmservice.model.Film;
-import filmservice.util.mock.FilmsUtil;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
+
 @Repository
-public class FilmRepositoryImpl implements FilmRepository{
+@Transactional(readOnly = true)
+public class FilmRepositoryImpl implements FilmRepository {
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
+    @Transactional
     public Film save(Film film) {
-        FilmsUtil.getFilmsList().add(film);
-        return film;
+        if (film.isNew()) {
+            em.persist(film);
+            return film;
+        } else {
+            return em.merge(film);
+        }
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
-        return FilmsUtil.getFilmMap().remove(id) != null;
+        return em.createNamedQuery(Film.DELETE).setParameter("id", id).executeUpdate() != 0;
     }
 
     @Override
     public Film get(int id) {
-        return FilmsUtil.getFilmMap().get(id);
+        return em.find(Film.class, id);
     }
 
     @Override
     public List<Film> getAll() {
-        return FilmsUtil.getFilmsList();
+        return em.createNamedQuery(Film.GET_ALL, Film.class).getResultList();
     }
+
+    @Override
+    public List<Film> getByTitle(String title) {
+        return em.createNamedQuery(Film.GET_BY_TITLE, Film.class).setParameter("title", title).getResultList();
+    }
+
 }

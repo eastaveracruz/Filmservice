@@ -14,4 +14,6 @@ public interface FilmRepository {
 
     List<Film> getAll();
 
+    List<Film> getByTitle(String title);
+
 }

@@ -17,4 +17,6 @@ public interface FilmService {
 
     List<Film> getAll();
 
+    List<Film> getByTitle(String title);
+
 }

@@ -1,8 +1,10 @@
 package filmservice.util.mock;
 
 import filmservice.model.Film;
+import filmservice.model.Role;
 import filmservice.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -12,14 +14,14 @@ public class UserUtil {
     private static List<User> userList = new CopyOnWriteArrayList<>();
 
     static {
-        for (int i = 0; i < 5; i++) {
-            userList.add(new User(i, "User " + i));
+        for (int i = 1; i <= 5; i++) {
+            userList.add(new User(i, "User" + i, "123", Role.ROLE_USER));
         }
-        userList.add(new User(6 , "Admin"));
+        userList.add(new User(6 , "Admin", "123", Role.ROLE_ADMIN));
     }
 
     public static List<User> getUserList() {
-        return userList;
+        return new ArrayList<>(userList);
     }
 
     public static Map<Integer, User> getUserMap() {

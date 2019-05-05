@@ -22,7 +22,7 @@ public class FilmServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
         controller = springContext.getBean(FilmController.class);
     }
 
@@ -35,7 +35,6 @@ public class FilmServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOG.debug("redirect to films");
-        LOG.info("redirect to films");
         req.setAttribute("filmsList", controller.getAll());
         req.getRequestDispatcher("/films.jsp").forward(req, resp);
     }

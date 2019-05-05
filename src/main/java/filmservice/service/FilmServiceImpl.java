@@ -5,6 +5,7 @@ import filmservice.repository.FilmRepository;
 import filmservice.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public Film create(Film film) {
+        Assert.notNull(film, "film must be not null");
         return checkNotFoundWithId(repository.save(film), film.getId());
     }
 
@@ -37,11 +39,17 @@ public class FilmServiceImpl implements FilmService {
 
     @Override
     public void update(Film film) {
+        Assert.notNull(film, "film must be not null");
         checkNotFoundWithId(repository.save(film), film.getId());
     }
 
     @Override
     public List<Film> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public List<Film> getByTitle(String title) {
+        return repository.getByTitle(title);
     }
 }
