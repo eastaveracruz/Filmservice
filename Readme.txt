@@ -1,0 +1,1 @@
+${FILM_ROOT}/log/filmservice.log - путь к логам
