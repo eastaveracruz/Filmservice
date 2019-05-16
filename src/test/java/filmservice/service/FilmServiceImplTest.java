@@ -63,7 +63,7 @@ public class FilmServiceImplTest {
         List<Film> filmsExp = FilmsUtil.getFilmsList();
         filmsExp.add(FILM);
 
-        //FILM без id, тест проходит???
+        //TODO FILM без id, тест проходит???
         assertThat(films).isEqualTo(filmsExp);
     }
 
