@@ -1,6 +1,8 @@
 package filmservice.repository;
 
+import filmservice.Profiles;
 import filmservice.model.Film;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

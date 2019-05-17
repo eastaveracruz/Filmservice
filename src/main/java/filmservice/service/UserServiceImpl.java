@@ -1,10 +1,12 @@
 package filmservice.service;
 
+import filmservice.Profiles;
 import filmservice.model.User;
 import filmservice.repository.UserRepository;
 import filmservice.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.Assert;
 
 import java.util.List;
