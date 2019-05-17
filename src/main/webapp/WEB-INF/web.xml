@@ -4,20 +4,25 @@
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-    <!--<display-title>Filmservice</display-title>-->
-
-    <!--<servlet>-->
-        <!--<servlet-title>filmServlet</servlet-title>-->
-        <!--<servlet-class>filmservice.web.FilmServlet</servlet-class>-->
-        <!--<load-on-startup>0</load-on-startup>-->
-    <!--</servlet>-->
-    <!---->
-    <!--<servlet-mapping>-->
-        <!--<servlet-title>filmServlet</servlet-title>-->
-        <!--<url-pattern>/films</url-pattern>-->
-    <!--</servlet-mapping>-->
     <display-name>FilmsService</display-name>
-    
+
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>hsqldb</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:spring/spring-app.xml
+            classpath:spring/spring-db.xml
+        </param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
     <servlet>
         <servlet-name>filmsServlet</servlet-name>
         <servlet-class>filmservice.web.FilmServlet</servlet-class>
@@ -26,5 +31,16 @@
         <servlet-name>filmsServlet</servlet-name>
         <url-pattern>/films</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>userServlet</servlet-name>
+        <servlet-class>filmservice.web.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userServlet</servlet-name>
+        <url-pattern>/users</url-pattern>
+    </servlet-mapping>
+
+
 
 </web-app>
