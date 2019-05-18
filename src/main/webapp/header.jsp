@@ -1,8 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setBundle basename="messages.app"/>
+
 <html>
 <head>
-    <title>${applicationScope.title}</title>
+    <title><fmt:message key="app.title"/></title>
     <link rel="stylesheet" href="./resources/css/films.css">
 </head>
 <body style="position: relative; background-image: url(./resources/108.png);">

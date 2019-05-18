@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
 
 public class FilmServlet extends HttpServlet {
 
@@ -41,6 +42,7 @@ public class FilmServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LOG.debug("redirect to films");
         req.setAttribute("filmsList", controller.getAll());
+        resp.setLocale(new Locale("en"));
         req.getRequestDispatcher("/films.jsp").forward(req, resp);
     }
 }
