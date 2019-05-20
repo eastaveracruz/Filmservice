@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @NamedQueries({
         @NamedQuery(name = Film.GET_ALL, query = "SELECT f FROM Film f"),
-        @NamedQuery(name = Film.GET_BY_TITLE, query = "SELECT f FROM Film f WHERE f.title = :title"),
+        @NamedQuery(name = Film.GET_BY_TITLE, query = "SELECT f FROM Film f WHERE f.title LIKE :title"),
         @NamedQuery(name = Film.DELETE, query = "DELETE FROM Film f WHERE f.id=:id"),
 })
 @Entity

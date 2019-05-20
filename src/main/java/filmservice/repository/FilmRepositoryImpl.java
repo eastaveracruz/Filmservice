@@ -47,7 +47,7 @@ public class FilmRepositoryImpl implements FilmRepository {
 
     @Override
     public List<Film> getByTitle(String title) {
-        return em.createNamedQuery(Film.GET_BY_TITLE, Film.class).setParameter("title", title).getResultList();
+        return em.createNamedQuery(Film.GET_BY_TITLE, Film.class).setParameter("title", '%' + title + '%').getResultList();
     }
 
 }

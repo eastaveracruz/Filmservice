@@ -11,16 +11,14 @@
 <body style="position: relative; background-image: url(./resources/108.png);">
 <div id="header" style=" width:60%; margin-left: 20%; background-color: white; padding: 30px; margin-bottom: 30px">
     <div id="menu">
-        <a href="films?action=add" style="color: indianred">ADD NEW FILMS</a> |
-        <a href="index.html" style="color: indianred">BACK TO MAIN</a>
+        <a href="films?action=add" style="color: indianred"><fmt:message key="app.addFilm"/></a> |
+        <a href="index.html" style="color: indianred">_</a>
     </div>
 
     <div align="left" id="search">
-        <form action="films" method="get">
-            <label for="serchText" style="font-family: Arial">Search by Title</label>
-            <input type="text" name="search" id="serchText">
-            <input type="hidden" name="action" value="search">
-            <button type="submit">Search</button>
+        <form action="./" method="get">
+            <input type="text" name="title" id="serchText" placeholder="<fmt:message key="app.searchPlaceHolder"/>">
+            <button type="submit"><fmt:message key="app.searchButton"/></button>
         </form>
     </div>
 
