@@ -4,7 +4,7 @@ import filmservice.Profiles;
 import filmservice.model.Role;
 import filmservice.model.User;
 import filmservice.util.exception.NotFoundException;
-import filmservice.util.mock.UserUtil;
+import filmservice.util.assertion.UserCreationHelper;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -77,7 +77,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getAll() {
-        List<User> usersExp = UserUtil.getUserList();
+        List<User> usersExp = UserCreationHelper.getUserList();
         List<User> users = service.getAll();
         assertThat(users).isEqualTo(usersExp);
     }
@@ -100,7 +100,7 @@ public class UserServiceImplTest {
         service.create(USER);
         List<User> users = service.getAll();
 
-        List<User> usersExp = UserUtil.getUserList();
+        List<User> usersExp = UserCreationHelper.getUserList();
         usersExp.add(USER);
 
         assertThat(users).isEqualTo(usersExp);
@@ -124,7 +124,7 @@ public class UserServiceImplTest {
         service.delete(ID);
         List<User> users = service.getAll();
 
-        List<User> usersExp = UserUtil.getUserList();
+        List<User> usersExp = UserCreationHelper.getUserList();
         User uRemove = usersExp.stream().filter(user -> user.getId() == ID).findFirst().get();
         usersExp.remove(uRemove);
 

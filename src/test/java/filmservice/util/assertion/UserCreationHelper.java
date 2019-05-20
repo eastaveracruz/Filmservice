@@ -1,6 +1,5 @@
-package filmservice.util.mock;
+package filmservice.util.assertion;
 
-import filmservice.model.Film;
 import filmservice.model.Role;
 import filmservice.model.User;
 
@@ -10,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-public class UserUtil {
+public class UserCreationHelper {
     private static List<User> userList = new CopyOnWriteArrayList<>();
 
     static {

@@ -2,10 +2,8 @@ package filmservice.service;
 
 import filmservice.Profiles;
 import filmservice.model.Film;
-import filmservice.model.Role;
-import filmservice.model.User;
 import filmservice.util.exception.NotFoundException;
-import filmservice.util.mock.FilmsUtil;
+import filmservice.util.assertion.FilmCreationHelper;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @ContextConfiguration({
@@ -80,7 +77,7 @@ public class FilmServiceImplTest {
     @Test
     public void getAll() {
         List<Film> films = service.getAll();
-        List<Film> filmsExp = FilmsUtil.getFilmsList();
+        List<Film> filmsExp = FilmCreationHelper.getFilmsList();
         assertThat(films).isEqualTo(filmsExp);
     }
 
@@ -88,14 +85,14 @@ public class FilmServiceImplTest {
     public void getByTitle() {
         String title = "Film 01";
         List<Film> films = service.getByTitle(title);
-        List<Film> filmsExp = FilmsUtil.getFilmsList().stream().filter(film -> film.getTitle().contains(title)).collect(Collectors.toList());
+        List<Film> filmsExp = FilmCreationHelper.getFilmsList().stream().filter(film -> film.getTitle().contains(title)).collect(Collectors.toList());
         assertThat(films).isEqualTo(filmsExp);
     }
 
     @Test
     public void get() {
         Film film = service.get(ID);
-        Film filmExp = FilmsUtil.getFilmsList().stream().filter(film1 -> film.getId() == ID).findFirst().get();
+        Film filmExp = FilmCreationHelper.getFilmsList().stream().filter(film1 -> film.getId() == ID).findFirst().get();
         assertThat(film).isEqualTo(filmExp);
     }
 
@@ -104,7 +101,7 @@ public class FilmServiceImplTest {
         service.create(FILM);
         List<Film> films = service.getAll();
 
-        List<Film> filmsExp = FilmsUtil.getFilmsList();
+        List<Film> filmsExp = FilmCreationHelper.getFilmsList();
         filmsExp.add(FILM);
 
         //TODO FILM без id, тест проходит???
@@ -116,7 +113,7 @@ public class FilmServiceImplTest {
         service.delete(ID);
         List<Film> films = service.getAll();
 
-        List<Film> filmsExp = FilmsUtil.getFilmsList();
+        List<Film> filmsExp = FilmCreationHelper.getFilmsList();
         Film filmsRemove = filmsExp.stream().filter(film -> film.getId() == ID).findFirst().get();
         filmsExp.remove(filmsRemove);
 

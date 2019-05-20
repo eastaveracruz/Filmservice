@@ -1,4 +1,4 @@
-package filmservice.util.mock;
+package filmservice.util.assertion;
 
 import filmservice.model.Film;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-public class FilmsUtil {
+public class FilmCreationHelper {
     private static List<Film> filmsList = new CopyOnWriteArrayList<>();
 
     static {
