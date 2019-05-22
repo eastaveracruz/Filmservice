@@ -4,10 +4,7 @@
 
 
 <div id="header" style=" width:60%; margin-left: 20%; background-color: white; padding: 30px; margin-top: 30px">
-    <c:forEach items="${userList}" var="user">
-        <jsp:useBean id="user" scope="page" class="filmservice.model.User"/>
-        <p>${user.toString()}</p>
-    </c:forEach>
+ This is Footer
 </div>
 
 </body>

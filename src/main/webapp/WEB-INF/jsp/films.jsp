@@ -10,7 +10,7 @@
                 <td><img src="${film.image}" style="display:inline-block; width: 250px"></td>
                 <td valign="top">
                     <h3 style="text-align: center; font-family: Arial">${film.title}</h3>
-                    <h6>Gencre: ${film.genre}</h6>
+                    <h6 style=" padding-left: 20px; ">Gencre: ${film.genre}</h6>
                     <div style="width: 500px; padding-left: 20px; padding-bottom: 40px; font-family: Arial">${film.description}</div>
                 </td>
             </tr>
