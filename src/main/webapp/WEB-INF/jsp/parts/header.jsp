@@ -11,8 +11,9 @@
 <body style="position: relative; background-image: url(./resources/108.png);">
 <div id="header" style=" width:60%; margin-left: 20%; background-color: white; padding: 30px; margin-bottom: 30px">
     <div id="menu">
-        <a href="films?action=add" style="color: indianred"><fmt:message key="app.addFilm"/></a> |
-        <a href="index.html" style="color: indianred">_</a>
+        <a href="${pageContext.request.contextPath}">Home</a> |
+        <a href="films?action=add" target="_blank"><fmt:message key="app.addFilm"/></a> |
+        <a href="index.html">_</a>
     </div>
 
     <div align="left" id="search">

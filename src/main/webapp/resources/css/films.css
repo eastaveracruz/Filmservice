@@ -24,9 +24,17 @@ body {
 
 #menu {
     margin-bottom: 30px;
+
 }
 
 #cross {
     text-decoration: none;
     color: darkred;
+}
+
+A {
+    color: indianred;
+    alink: #ff6a1b;
+    vlink: indianred;
+    text-decoration: none;
 }
