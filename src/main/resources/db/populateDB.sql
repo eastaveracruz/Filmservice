@@ -18,7 +18,8 @@ INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_USER', 3),
   ('ROLE_USER', 4),
   ('ROLE_USER', 5),
-  ('ROLE_ADMIN', 6);
+  ('ROLE_ADMIN', 6),
+  ('ROLE_USER', 6);
 
 INSERT INTO films (title, image, description, genre) VALUES
   ('Film 01', './resources/films_img/xmen01.jpg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'ACTION'),

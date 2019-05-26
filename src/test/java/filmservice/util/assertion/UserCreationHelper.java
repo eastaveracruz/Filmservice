@@ -16,7 +16,7 @@ public class UserCreationHelper {
         for (int i = 1; i <= 5; i++) {
             userList.add(new User(i, "User" + i, "123", Role.ROLE_USER));
         }
-        userList.add(new User(6 , "Admin", "123", Role.ROLE_ADMIN));
+        userList.add(new User(6 , "Admin", "123", Role.ROLE_ADMIN, Role.ROLE_USER));
     }
 
     public static List<User> getUserList() {
