@@ -9,8 +9,5 @@
         <module name="Filmservice" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Filmservice" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
