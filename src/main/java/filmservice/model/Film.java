@@ -12,7 +12,7 @@ import java.util.Objects;
 })
 @Entity
 @Table(name = "films")
-public class Film {
+public class Film implements BaseEntity{
     public static final int START_SEQ = 1;
 
     public static final String GET_ALL = "Film.get_all";
@@ -54,6 +54,11 @@ public class Film {
         return id;
     }
 
+    @Override
+    public boolean isNew() {
+        return this.id == null;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -89,8 +94,6 @@ public class Film {
     public void setImage(String image) {
         this.image = image;
     }
-
-    public boolean isNew(){ return this.id == null;}
 
     @Override
     public boolean equals(Object o) {

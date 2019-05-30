@@ -1,9 +1,9 @@
 package filmservice.util;
 
-import filmservice.model.User;
+import filmservice.model.BaseEntity;
 import filmservice.util.exception.NotFoundException;
 
-public class ValidationUtil {
+public class ValidationUtil<T> {
 
     public static <T> T checkNotFoundWithId(T object, int id) {
         return checkNotFound(object, "id=" + id);
@@ -24,13 +24,13 @@ public class ValidationUtil {
         }
     }
 
-    public static void checkNew(User entity) {
+    public static <T extends BaseEntity> void checkNew(T entity) {
         if (!entity.isNew()) {
             throw new IllegalArgumentException(entity + " must be new (id=null)");
         }
     }
 
-    public static void assureIdConsistent(User entity, int id) {
+    public static <T extends BaseEntity> void assureIdConsistent(T entity, int id) {
 //      conservative when you reply, but accept liberally (http://stackoverflow.com/a/32728226/548473)
         if (entity.isNew()) {
             entity.setId(id);

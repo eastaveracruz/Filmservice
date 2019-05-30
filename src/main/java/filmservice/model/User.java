@@ -3,10 +3,7 @@ package filmservice.model;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @NamedQueries({
         @NamedQuery(name = User.GET_ALL, query = "SELECT u FROM User u"),
@@ -14,7 +11,8 @@ import java.util.Set;
 })
 @Entity
 @Table(name = "users")
-public class User {
+//@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE, setterVisibility = NONE)
+public class User implements BaseEntity {
     public static final int START_SEQ = 1;
 
     public static final String GET_ALL = "User.get_all";
@@ -50,6 +48,13 @@ public class User {
         this.password = password;
         setRoles(roles);
     }
+
+    public User(String login, String password, Role... roles){
+        this.login = login;
+        this.password = password;
+        this.roles = EnumSet.copyOf(Arrays.asList(roles));
+    }
+
 
     public int getId() {
         return id;
