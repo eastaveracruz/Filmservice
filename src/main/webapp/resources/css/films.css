@@ -1,5 +1,15 @@
+.wrapper {
+    width: 60%;
+    margin-left: 20%;
+    background-color: white;
+    padding: 30px;
+    min-height: 60%;
+}
+
 body {
-    font-family: Arial, sans-serif
+    font-family: sans-serif;
+    position: relative;
+    background-image: url(./resources/108.png);
 }
 
 #user_name {

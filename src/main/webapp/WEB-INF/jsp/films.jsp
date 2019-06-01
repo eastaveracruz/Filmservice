@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="parts/header.jsp"></jsp:include>
+<div class="wrapper">
 
-<div id="wrapper" style="width:60%; margin-left: 20%; background-color: white; padding: 30px">
     <table align="center">
         <c:forEach items="${filmsList}" var="film">
             <jsp:useBean id="film" scope="page" class="filmservice.model.Film"/>

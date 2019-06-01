@@ -12,15 +12,13 @@
 <div id="header" style=" width:60%; margin-left: 20%; background-color: white; padding: 30px; margin-bottom: 30px">
     <div id="menu">
         <a href="${pageContext.request.contextPath}">Home</a> |
-        <a href="films?action=add" target="_blank"><fmt:message key="app.addFilm"/></a> |
-        <a href="index.html">_</a>
+        <a href="./add"><fmt:message key="app.addFilm"/></a> |
+        <%--<a href="index.html">_</a>--%>
     </div>
-
     <div align="left" id="search">
         <form action="./" method="get">
             <input type="text" name="title" id="serchText" placeholder="<fmt:message key="app.searchPlaceHolder"/>">
             <button type="submit"><fmt:message key="app.searchButton"/></button>
         </form>
     </div>
-
 </div>
