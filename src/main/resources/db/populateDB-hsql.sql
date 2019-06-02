@@ -3,12 +3,13 @@ DELETE FROM users;
 DELETE FROM films;
 
 INSERT INTO users (login, password) VALUES
+  ('User', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
   ('User1', '123'),
   ('User2', '123'),
   ('User3', '123'),
   ('User4', '123'),
   ('User5', '123'),
-  ('Admin', '123');
+  ('Admin', '$2a$11$tnqA0FyrsfDjSxFHCXPj7.7jViAHhwOGzP2EkkcQ3hErfI4B1gDNq');
 
 INSERT INTO user_roles (role, user_id) VALUES
   ('ROLE_USER', 1),

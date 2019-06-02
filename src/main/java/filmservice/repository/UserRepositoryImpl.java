@@ -1,6 +1,7 @@
 package filmservice.repository;
 
 import filmservice.model.User;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,4 +44,12 @@ public class UserRepositoryImpl implements UserRepository {
     public List<User> getAll() {
         return em.createNamedQuery(User.GET_ALL, User.class).getResultList();
     }
+
+    @Override
+    public User getByLogin(String login) {
+        List<User> users = em.createNamedQuery(User.GET_BY_LOGIN, User.class).setParameter("login", login).getResultList();
+        return  DataAccessUtils.singleResult(users);
+    }
+
+
 }

@@ -1,10 +1,13 @@
 package filmservice.service;
 
-import filmservice.Profiles;
 import filmservice.model.User;
 import filmservice.repository.UserRepository;
 import filmservice.util.exception.NotFoundException;
+import filmservice.web.AuthorizedUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -12,15 +15,12 @@ import java.util.List;
 
 import static filmservice.util.ValidationUtil.checkNotFoundWithId;
 
-@Service
-public class UserServiceImpl implements UserService {
-
-    private final UserRepository repository;
+@Service("userService")
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
-    public UserServiceImpl(UserRepository repository) {
-        this.repository = repository;
-    }
+    private UserRepository repository;
+
 
     @Override
     public User create(User user) {
@@ -47,5 +47,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return repository.getAll();
+    }
+
+    @Override
+    public User getByLogin(String userName) {
+        User user = repository.getByLogin(userName);
+        if (user == null){
+            throw new UsernameNotFoundException(String.format("User with login %s not found in database", userName));
+        }
+        return user;
+    }
+
+
+    @Override
+    public AuthorizedUser loadUserByUsername(String userName) throws UsernameNotFoundException {
+
+        User user = repository.getByLogin(userName);
+
+        if (user == null){
+            throw new UsernameNotFoundException(String.format("User with login %s not found in database", userName));
+        }
+        return new AuthorizedUser(user);
     }
 }

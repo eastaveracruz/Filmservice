@@ -1,15 +1,20 @@
 package filmservice.web;
 
 import filmservice.model.Film;
+import filmservice.model.User;
 import filmservice.service.FilmService;
+import filmservice.service.SecurityService;
 import filmservice.service.UserService;
 import filmservice.util.FileUtil;
+import filmservice.validator.UserValidator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +37,12 @@ public class RootController {
     @Autowired
     private ServletContext servletContext;
 
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private SecurityService securityService;
+
     @GetMapping("/")
     public String films(@RequestParam(required = false) String title, Model model) {
         if (title == null || "".equals(title)) {
@@ -40,6 +51,9 @@ public class RootController {
             model.addAttribute("filmsList", filmService.getByTitle(title));
         }
         model.addAttribute("userList", userService.getAll());
+//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(11);
+//        System.out.println(bCryptPasswordEncoder.encode("user"));
+
         return "films";
     }
 
@@ -73,6 +87,42 @@ public class RootController {
         log.info("The database entry created successfully: {}", newFilm.toString());
 
         return "redirect:/add";
+    }
+
+
+    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    public String registration(Model model) {
+        model.addAttribute("userForm", new User());
+
+        return "registration";
+    }
+
+    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+        userValidator.validate(userForm, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
+
+        userService.create(userForm);
+
+        securityService.autoLogin(userForm.getLogin(), userForm.getConfirmPassword());
+
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(Model model, String error, String logout) {
+        if (error != null) {
+            model.addAttribute("error", "Username or password is incorrect.");
+        }
+
+        if (logout != null) {
+            model.addAttribute("message", "Logged out successfully.");
+        }
+
+        return "login";
     }
 
 }

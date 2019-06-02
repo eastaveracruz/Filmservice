@@ -8,6 +8,7 @@ import java.util.*;
 @NamedQueries({
         @NamedQuery(name = User.GET_ALL, query = "SELECT u FROM User u"),
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
+        @NamedQuery(name = User.GET_BY_LOGIN, query = "SELECT DISTINCT u FROM User u WHERE u.login=:login"),
 })
 @Entity
 @Table(name = "users")
@@ -17,6 +18,7 @@ public class User implements BaseEntity {
 
     public static final String GET_ALL = "User.get_all";
     public static final String DELETE = "User.delete";
+    public static final String GET_BY_LOGIN = "User.get_by_login";
 
     @Id
     @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1, initialValue = START_SEQ)
@@ -34,6 +36,17 @@ public class User implements BaseEntity {
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    @Transient
+    private String confirmPassword;
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
     public User() {
     }
