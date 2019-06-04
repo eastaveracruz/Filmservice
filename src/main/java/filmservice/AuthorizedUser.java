@@ -1,4 +1,4 @@
-package filmservice.web;
+package filmservice;
 
 import filmservice.model.BaseEntity;
 import filmservice.model.User;

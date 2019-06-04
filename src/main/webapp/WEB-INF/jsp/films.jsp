@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="parts/header.jsp"></jsp:include>
+<jsp:include page="parts/header.jsp"/>
 <div class="wrapper">
 
     <table align="center">
@@ -18,4 +18,4 @@
     </table>
 </div>
 
-<jsp:include page="parts/footer.jsp"></jsp:include>
+<jsp:include page="parts/footer.jsp"/>

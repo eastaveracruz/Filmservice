@@ -10,13 +10,13 @@ ALTER SEQUENCE film_seq
 RESTART WITH 1;
 
 INSERT INTO users (login, password)
-VALUES ('User', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
-       ('User1', '123'),
-       ('User2', '123'),
-       ('User3', '123'),
-       ('User4', '123'),
-       ('User5', '123'),
-       ('Admin', '$2a$11$tnqA0FyrsfDjSxFHCXPj7.7jViAHhwOGzP2EkkcQ3hErfI4B1gDNq');
+VALUES ('user', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
+       ('user1', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
+       ('user2', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
+       ('user3', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
+       ('user4', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
+       ('user5', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
+       ('admin', '$2a$11$tnqA0FyrsfDjSxFHCXPj7.7jViAHhwOGzP2EkkcQ3hErfI4B1gDNq');
 
 INSERT INTO user_roles (role, user_id)
 VALUES ('ROLE_USER', 1),
@@ -24,8 +24,9 @@ VALUES ('ROLE_USER', 1),
        ('ROLE_USER', 3),
        ('ROLE_USER', 4),
        ('ROLE_USER', 5),
-       ('ROLE_ADMIN', 6),
-       ('ROLE_USER', 6);
+       ('ROLE_USER', 6),
+       ('ROLE_ADMIN', 7),
+       ('ROLE_USER', 7);
 
 INSERT INTO films (title, image, description, genre)
 VALUES ('Film 01',

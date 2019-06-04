@@ -1,6 +1,7 @@
 package filmservice.web;
 
 import filmservice.model.Film;
+import filmservice.model.Role;
 import filmservice.model.User;
 import filmservice.service.FilmService;
 import filmservice.service.SecurityService;
@@ -22,6 +23,9 @@ import javax.servlet.ServletContext;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class RootController {
@@ -90,38 +94,33 @@ public class RootController {
     }
 
 
-    @RequestMapping(value = "/registration", method = RequestMethod.GET)
+    @GetMapping("/registration" )
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
 
         return "registration";
     }
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
+    @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-        userValidator.validate(userForm, bindingResult);
 
+        userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-
         userService.create(userForm);
-
         securityService.autoLogin(userForm.getLogin(), userForm.getConfirmPassword());
-
         return "redirect:/";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
         if (error != null) {
-            model.addAttribute("error", "Username or password is incorrect.");
+            model.addAttribute("error", "Username or password is incorrect");
         }
-
         if (logout != null) {
-            model.addAttribute("message", "Logged out successfully.");
+            model.addAttribute("message", "Logged out successfully");
         }
-
         return "login";
     }
 

@@ -1,9 +1,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<jsp:include page="parts/header.jsp"></jsp:include>
+<jsp:include page="parts/header.jsp"/>
 
 <div class="wrapper">
 
@@ -12,7 +13,7 @@
 
         <table>
             <tr>
-                <td><span>${message}</span></td>
+                <td><span class="goodMessage">${message}</span></td>
             </tr>
             <tr>
                 <td><input name="username" type="text" class="form-control" placeholder="Username" autofocus="true"/>
@@ -31,9 +32,12 @@
             </tr>
         </table>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
     </form>
+
+    <div class="userAndPass">
+
+    </div>
 
 </div>
 
-<jsp:include page="parts/footer.jsp"></jsp:include>
+<jsp:include page="parts/footer.jsp"/>

@@ -8,7 +8,6 @@
 
 body {
     font-family: sans-serif;
-    position: relative;
     background-image: url(./resources/108.png);
 }
 
@@ -28,10 +27,6 @@ body {
     float: left;
 }
 
-#login {
-    float: right
-}
-
 #menu {
     margin-bottom: 30px;
 
@@ -47,4 +42,24 @@ A {
     alink: #ff6a1b;
     vlink: indianred;
     text-decoration: none;
+}
+
+.has-error {
+    font-size: 12px;
+    font-family: Verdana, Tahoma, sans-serif;
+    color: indianred;
+}
+
+.goodMessage {
+    font-size: 12px;
+    font-family: Verdana, Tahoma, sans-serif;
+    color: green;
+}
+
+footer {
+    width: 60%;
+    margin-left: 20%;
+    background-color: white;
+    padding: 30px;
+    margin-top: 30px
 }

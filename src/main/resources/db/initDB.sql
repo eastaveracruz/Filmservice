@@ -30,3 +30,10 @@ CREATE TABLE films
   description             VARCHAR                 NOT NULL,
   genre             VARCHAR                 NOT NULL
 );
+
+CREATE TABLE ratings
+(
+  user_id INTEGER NOT NULL,
+  film_id INTEGER NOT NULL,
+  rating INTEGER NOT NULL
+)

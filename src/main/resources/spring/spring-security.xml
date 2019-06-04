@@ -14,17 +14,20 @@
         <csrf disabled="true"/>
     </http>
 
-    <http auto-config="true">
+    <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/**/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/add" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/" access="permitAll()"/>
-        <intercept-url pattern="/registration" access="permitAll()"/>
+        <intercept-url pattern="/registration" access="isAnonymous()"/>
         <intercept-url pattern="/login" access="permitAll()"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
 
-        <form-login login-page="/login" default-target-url="/welcome" authentication-failure-url="/login?error"
+        <form-login login-page="/login" default-target-url="/" authentication-failure-url="/login?error"
                     username-parameter="username" password-parameter="password"/>
 
+        <logout logout-url="/logout" />
         <logout logout-success-url="/login?logout"/>
+
         <csrf disabled="true"/>
     </http>
 
@@ -32,7 +35,6 @@
     <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="userDetailsServiceImpl">
             <password-encoder ref="encoder"/>
-
         </authentication-provider>
     </authentication-manager>
 

@@ -1,6 +1,6 @@
 package filmservice.service;
 
-import filmservice.web.AuthorizedUser;
+import filmservice.AuthorizedUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +53,8 @@ public class SecurityService {
         return get().getUsername();
     }
 
-    public void autoLogin(String username, String password) {
-        UserDetails userDetails = userService.loadUserByUsername(username);
+    public void autoLogin(String login, String password) {
+        UserDetails userDetails = userService.loadUserByUsername(login);
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
 
@@ -63,7 +63,7 @@ public class SecurityService {
         if (authenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            log.debug(String.format("Successfully %s auto logged in", username));
+            log.debug(String.format("Successfully %s auto logged in", login));
         }
     }
 
