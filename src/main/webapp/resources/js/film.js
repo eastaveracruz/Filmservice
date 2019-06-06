@@ -14,3 +14,20 @@ function getAllUsers() {
     )
 }
 
+
+$(".content form").submit(function () {
+    var filmId = $(this).attr('filmId');
+    $.post({
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function (data) {
+            var resp = $.parseJSON(data);
+            if (resp.scs) {
+                var assessment = $(".content form[filmId=" + filmId + "] select").val();
+                $("span[yourAssessment=" + filmId + "]").text(assessment);
+                $(".content h2[filmId=" + filmId + "]").text(resp.rating);
+            }
+        }
+    });
+    return false;
+});

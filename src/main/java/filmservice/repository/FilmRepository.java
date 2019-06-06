@@ -1,6 +1,8 @@
 package filmservice.repository;
 
 import filmservice.model.Film;
+import filmservice.model.Rating;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,4 +18,5 @@ public interface FilmRepository {
 
     List<Film> getByTitle(String title);
 
+    Rating save(Rating rating);
 }

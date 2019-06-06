@@ -1,10 +1,13 @@
 package filmservice;
 
 import filmservice.model.BaseEntity;
+import filmservice.model.Rating;
 import filmservice.model.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
 
@@ -15,7 +18,7 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
         this.user = user;
     }
 
-    public int getId(){
+    public int getId() {
         return user.getId();
     }
 
@@ -25,6 +28,10 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Map<Integer, Rating> getUserRating() {
+        return user.getRating();
     }
 
     @Override

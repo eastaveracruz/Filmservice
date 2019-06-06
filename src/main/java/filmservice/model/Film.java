@@ -1,10 +1,15 @@
 package filmservice.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 
-
+@NamedNativeQuery(
+        name = Film.GET_ALL_WITH_RATING,
+        query = "select f.title, f.image, f.description, f.genre, r.rating\n" +
+                "from films f  right join  (select r.film_id, avg(r.rating) as rating from ratings r group by r.film_id) r\n" +
+                "    on f.id = r.film_id")
 @NamedQueries({
         @NamedQuery(name = Film.GET_ALL, query = "SELECT f FROM Film f"),
         @NamedQuery(name = Film.GET_BY_TITLE, query = "SELECT f FROM Film f WHERE f.title LIKE :title"),
@@ -16,6 +21,7 @@ public class Film implements BaseEntity{
     public static final int START_SEQ = 1;
 
     public static final String GET_ALL = "Film.get_all";
+    public static final String GET_ALL_WITH_RATING = "Film.get_all_with_rating";
     public static final String GET_BY_TITLE = "Film.get_by_title";
     public static final String DELETE = "Film.delete";
 
@@ -35,6 +41,18 @@ public class Film implements BaseEntity{
 
     @Column(name = "genre")
     private String genre;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "film_id")
+    private List<Rating> listRating;
+
+    public List<Rating> getListRating() {
+        return listRating;
+    }
+
+    public void setListRating(List<Rating> listRating) {
+        this.listRating = listRating;
+    }
 
     public Film(){}
 

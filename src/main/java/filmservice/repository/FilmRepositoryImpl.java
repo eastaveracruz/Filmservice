@@ -1,13 +1,13 @@
 package filmservice.repository;
 
-import filmservice.Profiles;
 import filmservice.model.Film;
-import org.springframework.context.annotation.Profile;
+import filmservice.model.Rating;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -50,4 +50,14 @@ public class FilmRepositoryImpl implements FilmRepository {
         return em.createNamedQuery(Film.GET_BY_TITLE, Film.class).setParameter("title", '%' + title + '%').getResultList();
     }
 
+    @Override
+    @Transactional
+    public Rating save(Rating rating) {
+        if (rating.isNew()) {
+            em.persist(rating);
+            return rating;
+        } else {
+            return em.merge(rating);
+        }
+    }
 }

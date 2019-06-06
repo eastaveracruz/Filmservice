@@ -28,6 +28,7 @@ VALUES ('ROLE_USER', 1),
        ('ROLE_ADMIN', 7),
        ('ROLE_USER', 7);
 
+
 INSERT INTO films (title, image, description, genre)
 VALUES ('Film 01',
         './resources/films_img/xmen01.jpg',
@@ -73,3 +74,9 @@ VALUES ('Film 01',
         './resources/films_img/xmen11.jpg',
         'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
         'ACTION');
+
+INSERT INTO ratings (user_id, film_id, rating)
+VALUES (1, 1, 5),
+       (1, 2, 6),
+       (2, 1, 9),
+       (2, 2, 1);

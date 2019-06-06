@@ -15,7 +15,7 @@
             </tr>
             <tr>
                 <td><label for="description">Description</label></td>
-                <td><input type="text" name="description" id="description"></td>
+                <td><textarea name="description" id="description" cols="70" rows="15"></textarea></td>
             </tr>
             <tr>
                 <td><label for="genre">Genre</label></td>

@@ -1,7 +1,9 @@
 package filmservice.web;
 
+import filmservice.AuthorizedUser;
 import filmservice.model.Film;
-import filmservice.model.Role;
+import filmservice.model.RatedFilm;
+import filmservice.model.Rating;
 import filmservice.model.User;
 import filmservice.service.FilmService;
 import filmservice.service.SecurityService;
@@ -12,7 +14,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,12 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @Controller
 public class RootController {
@@ -49,15 +48,18 @@ public class RootController {
 
     @GetMapping("/")
     public String films(@RequestParam(required = false) String title, Model model) {
+        List<RatedFilm> filmsList = null;
         if (title == null || "".equals(title)) {
-            model.addAttribute("filmsList", filmService.getAll());
+            filmsList = filmService.getAllRatedFilm();
         } else {
-            model.addAttribute("filmsList", filmService.getByTitle(title));
+            filmsList = filmService.getRatedFilmByTitle(title);
         }
+        if (SecurityService.safeGet() != null){
+            Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
+            model.addAttribute("userRatingMap", userRating);
+        }
+        model.addAttribute("filmsList", filmsList);
         model.addAttribute("userList", userService.getAll());
-//        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(11);
-//        System.out.println(bCryptPasswordEncoder.encode("user"));
-
         return "films";
     }
 
@@ -94,7 +96,7 @@ public class RootController {
     }
 
 
-    @GetMapping("/registration" )
+    @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
 

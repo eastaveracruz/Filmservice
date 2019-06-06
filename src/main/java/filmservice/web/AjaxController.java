@@ -1,23 +1,44 @@
 package filmservice.web;
 
-import filmservice.model.User;
+import filmservice.model.Rating;
+import filmservice.service.FilmService;
+import filmservice.service.SecurityService;
 import filmservice.web.user.AbstractUserController;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.awt.*;
-import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/ajax/admin/users")
+@RequestMapping("/ajax")
 public class AjaxController extends AbstractUserController {
 
+    @Autowired
+    private FilmService filmService;
 
-    @Override
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<User> getAll() {
-        return super.getAll();
+    @PostMapping(path = "/save/rating")
+    public String saveRating(@RequestParam int filmId, @RequestParam int rating) {
+
+        Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
+        Rating filmRating = null;
+        if (userRating.containsKey(filmId)) {
+            filmRating = userRating.get(filmId);
+            filmRating.setRating(rating);
+        } else {
+            int userId = SecurityService.getId();
+            filmRating = new Rating(userId, filmId, rating);
+        }
+        Rating newRating = filmService.save(filmRating);
+        if (newRating != null) {
+            userRating.put(filmId, newRating);
+            double avgRating = filmService.getRatedFilm(filmId).getAvgRating();
+            return String.format(Locale.ENGLISH, "{ \"scs\": true, \"rating\": %.1f}", avgRating);
+        }
+        return "{scs: false}";
     }
+
 }

@@ -37,8 +37,21 @@ public class User implements BaseEntity {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    @MapKey(name = "filmId")
+    private Map<Integer, Rating> rating;
+
     @Transient
     private String confirmPassword;
+
+    public Map<Integer, Rating> getRating() {
+        return rating;
+    }
+
+    public void setRating(Map<Integer, Rating> rating) {
+        this.rating = rating;
+    }
 
     public String getConfirmPassword() {
         return confirmPassword;
