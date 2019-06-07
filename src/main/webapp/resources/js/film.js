@@ -14,8 +14,7 @@ function getAllUsers() {
     )
 }
 
-
-$(".content form").submit(function () {
+$(".assessment").submit(function () {
     var filmId = $(this).attr('filmId');
     $.post({
         url: $(this).attr('action'),
@@ -23,11 +22,14 @@ $(".content form").submit(function () {
         success: function (data) {
             var resp = $.parseJSON(data);
             if (resp.scs) {
-                var assessment = $(".content form[filmId=" + filmId + "] select").val();
+                var assessment = $("form[filmId=" + filmId + "] select").val();
                 $("span[yourAssessment=" + filmId + "]").text(assessment);
-                $(".content h2[filmId=" + filmId + "]").text(resp.rating);
+                $("h2[filmId=" + filmId + "]").text(resp.rating);
             }
         }
     });
     return false;
 });
+
+var text = $(".content .description").text();
+$(".content .description").text(text.substr(0, 200) + "...");

@@ -36,7 +36,8 @@ public class FilmServiceImplTest {
     private static StringBuilder results = new StringBuilder();
 
     private static final int ID = 1;
-    private static final Film FILM = new Film("testFilm", "no image", "some text", "test genre");
+//    private static final Film FILM = new Film("testFilm", "no image", "some text", "test genre");
+    private static final Film FILM = null;
 
     @Autowired
     private FilmService service;

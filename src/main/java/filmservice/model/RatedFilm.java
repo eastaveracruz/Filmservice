@@ -1,5 +1,7 @@
 package filmservice.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -16,6 +18,8 @@ public class RatedFilm implements BaseEntity {
 
     private String genre;
 
+    private LocalDate date;
+
     private double avgRating;
 
     public RatedFilm() {
@@ -27,6 +31,7 @@ public class RatedFilm implements BaseEntity {
         this.image = film.getImage();
         this.description = film.getDescription();
         this.genre = film.getGenre();
+        this.date = film.getDate();
         this.avgRating = calculateAvgRating(film.getListRating());
     }
 
@@ -34,6 +39,14 @@ public class RatedFilm implements BaseEntity {
         double result;
         double rawAvgRating = listRating.stream().mapToDouble(value -> value.getRating()).average().orElse(-1);
         return Double.parseDouble(String.format(Locale.ENGLISH, "%.1f", rawAvgRating));
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     @Override

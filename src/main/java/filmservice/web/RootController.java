@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,6 +65,17 @@ public class RootController {
         return "films";
     }
 
+    @GetMapping("/film*")
+    public String getFilm(@RequestParam int id, Model model){
+        RatedFilm ratedFilm = filmService.getRatedFilm(id);
+        if (SecurityService.safeGet() != null){
+            Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
+            model.addAttribute("userRatingMap", userRating);
+        }
+        model.addAttribute("film", ratedFilm);
+        return "filmPage";
+    }
+
     @RequestMapping("/add")
     public String add(Model model) {
         model.addAttribute("film", new Film());
@@ -73,7 +86,8 @@ public class RootController {
     public String addFilm(@RequestParam("file") MultipartFile file,
                           @RequestParam("title") String title,
                           @RequestParam("description") String description,
-                          @RequestParam("genre") String genre) {
+                          @RequestParam("genre") String genre,
+                          @RequestParam("date") String date) {
 
 //        File download
         File uploadedFile = null;
@@ -89,7 +103,8 @@ public class RootController {
         }
 
 //        Create new Film
-        Film newFilm = filmService.create(new Film(title, String.format(".%s/%s", pathTodirecotry, uploadedFile.getName()), description, genre));
+        LocalDate filmDate = LocalDate.parse(date);
+        Film newFilm = filmService.create(new Film(title, String.format(".%s/%s", pathTodirecotry, uploadedFile.getName()), description, genre, filmDate));
         log.info("The database entry created successfully: {}", newFilm.toString());
 
         return "redirect:/add";

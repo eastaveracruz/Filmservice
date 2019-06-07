@@ -8,7 +8,6 @@
 <head>
     <title><fmt:message key="app.title"/></title>
     <link rel="stylesheet" href="./resources/css/films.css">
-    <link rel="stylesheet" href="./resources/css/jquery.rating.css">
     <link rel="icon" href="./resources/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="./resources/favicon.ico" type="image/x-icon">
 

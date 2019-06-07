@@ -11,15 +11,15 @@ import java.util.stream.Collectors;
 public class FilmCreationHelper {
     private static List<Film> filmsList = new CopyOnWriteArrayList<>();
 
-    static {
-        for (int i = 1; i <= 11; i++) {
-            filmsList.add(new Film(i, "Film " + String.format("%02d", i),
-                    "./resources/films_img/xmen" + String.format("%02d", i) + ".jpg",
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                    "ACTION"
-            ));
-        }
-    }
+//    static {
+//        for (int i = 1; i <= 11; i++) {
+//            filmsList.add(new Film(i, "Film " + String.format("%02d", i),
+//                    "./resources/films_img/xmen" + String.format("%02d", i) + ".jpg",
+//                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+//                    "ACTION"
+//            ));
+//        }
+//    }
 
     public static List<Film> getFilmsList() {
         return new ArrayList<>(filmsList);

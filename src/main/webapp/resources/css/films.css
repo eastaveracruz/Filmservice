@@ -77,10 +77,9 @@ A {
     color: green;
 }
 
-
-
 .genre {
     padding-left: 20px;
+    margin: 0px 0px 5px;
 }
 
 .wrapper h3 {
@@ -92,10 +91,47 @@ A {
     width: 250px
 }
 
-.description {
-    padding-left: 20px;
-    padding-bottom: 40px;
+.content .description {
+    padding: 20px;
     width: 450px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*display: -webkit-box;*/
+    /*-webkit-line-clamp: 3;*/
+    /*-webkit-box-orient: vertical;*/
+    height: 52px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.content img {
+    padding-top: 30px;
+}
+
+.filmPage img {
+    width: 800px;
+}
+
+.filmPage h1{
+    text-align: center;
+}
+
+.filmPage .description{
+    padding: 20px;
+}
+
+.filmPage h2 {
+    padding: 0 0 0 250px ;
+    font-size: 40px;
+    /*width: 60px;*/
+}
+
+.filmPage .info {
+    padding: 50px 50px 0;
+}
+
+.filmPage .select {
+    padding: 0 0 0 50px;
 }
 
 

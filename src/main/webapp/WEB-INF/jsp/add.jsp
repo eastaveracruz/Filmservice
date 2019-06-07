@@ -30,6 +30,10 @@
                 </td>
             </tr>
             <tr>
+                <td><label for="date">Date</label></td>
+                <td><input type="date" name="date" id="date" /></td>
+            </tr>
+            <tr>
                 <td><label for="file">Choos image</label></td>
                 <td><input type="file" name="file" id="file"></td>
             </tr>
