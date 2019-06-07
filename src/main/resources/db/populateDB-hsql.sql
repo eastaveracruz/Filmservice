@@ -1,6 +1,14 @@
 DELETE FROM user_roles;
 DELETE FROM users;
+DELETE FROM ratings;
 DELETE FROM films;
+
+ALTER SEQUENCE user_seq
+RESTART WITH 1;
+ALTER SEQUENCE rating_seq
+RESTART WITH 1;
+ALTER SEQUENCE film_seq
+RESTART WITH 1;
 
 INSERT INTO users (login, password) VALUES
   ('user', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
@@ -33,3 +41,9 @@ INSERT INTO films (title, image, description, genre) VALUES
   ('Film 09', './resources/films_img/xmen09.jpg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'ACTION'),
   ('Film 10', './resources/films_img/xmen10.jpg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'ACTION'),
   ('Film 11', './resources/films_img/xmen11.jpg', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.', 'ACTION');
+
+INSERT INTO ratings (user_id, film_id, rating)
+VALUES (1, 1, 5),
+       (1, 2, 6),
+       (2, 1, 9),
+       (2, 2, 1);

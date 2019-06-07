@@ -3,11 +3,16 @@ FROM user_roles;
 DELETE
 FROM users;
 DELETE
+FROM ratings;
+DELETE
 FROM films;
+
 ALTER SEQUENCE user_seq
-RESTART WITH 1;
+  RESTART WITH 1;
+ALTER SEQUENCE rating_seq
+  RESTART WITH 1;
 ALTER SEQUENCE film_seq
-RESTART WITH 1;
+  RESTART WITH 1;
 
 INSERT INTO users (login, password)
 VALUES ('user', '$2a$11$zDhuFTfr4bYpeYevidJZ.utCNhs8al79Fzt.29bEErW8UbIhKrTim'),
