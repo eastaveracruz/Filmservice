@@ -112,16 +112,16 @@ A {
     width: 800px;
 }
 
-.filmPage h1{
+.filmPage h1 {
     text-align: center;
 }
 
-.filmPage .description{
+.filmPage .description {
     padding: 20px;
 }
 
 .filmPage h2 {
-    padding: 0 0 0 250px ;
+    padding: 0 0 0 250px;
     font-size: 40px;
     /*width: 60px;*/
 }
@@ -132,6 +132,33 @@ A {
 
 .filmPage .select {
     padding: 0 0 0 50px;
+}
+
+.pagination {
+    display: block;
+    text-align: center;
+}
+
+.pagination li {
+    display: inline-block;
+    list-style-type: none;
+}
+
+.pagination li a{
+    display: block;
+    padding: 5px 10px;
+}
+
+.paginationFooter {
+    position: relative;
+}
+
+.pagination .currentPage {
+    border: 2px solid #77a8d0;
+}
+
+.pagination li:hover {
+    background-color: #edf5f9;
 }
 
 

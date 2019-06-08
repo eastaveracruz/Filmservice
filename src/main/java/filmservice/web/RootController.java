@@ -1,6 +1,5 @@
 package filmservice.web;
 
-import filmservice.AuthorizedUser;
 import filmservice.model.Film;
 import filmservice.model.RatedFilm;
 import filmservice.model.Rating;
@@ -9,6 +8,7 @@ import filmservice.service.FilmService;
 import filmservice.service.SecurityService;
 import filmservice.service.UserService;
 import filmservice.util.FileUtil;
+import filmservice.util.Pagination;
 import filmservice.validator.UserValidator;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
@@ -23,9 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.io.File;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -48,27 +47,46 @@ public class RootController {
     @Autowired
     private SecurityService securityService;
 
+
     @GetMapping("/")
-    public String films(@RequestParam(required = false) String title, Model model) {
-        List<RatedFilm> filmsList = null;
+    public String films() {
+        return "redirect:/1";
+    }
+
+    @GetMapping("/{page}")
+    public String films(@PathVariable Integer page, @RequestParam(required = false) String title, Model model) {
+        String paginationBlock = "";
+        List filmsList = null;
+        int recordsCount;
+        Map<String, String> parameters = new HashMap();
+
         if (title == null || "".equals(title)) {
-            filmsList = filmService.getAllRatedFilm();
+            recordsCount = filmService.recordsCount();
+            page = Pagination.pageValid(page, recordsCount);
+            filmsList = filmService.getAllRatedFilm(page);
         } else {
-            filmsList = filmService.getRatedFilmByTitle(title);
+            parameters.put("title", title);
+            recordsCount = filmService.recordsCount(title);
+            page = Pagination.pageValid(page, recordsCount);
+            filmsList = filmService.getRatedFilmByTitle(title, page);
         }
-        if (SecurityService.safeGet() != null){
+
+        paginationBlock = Pagination.generatePaginationBlock(page, recordsCount, parameters);
+
+        if (SecurityService.safeGet() != null) {
             Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
             model.addAttribute("userRatingMap", userRating);
         }
+        model.addAttribute("paginationBlock", paginationBlock);
         model.addAttribute("filmsList", filmsList);
         model.addAttribute("userList", userService.getAll());
         return "films";
     }
 
-    @GetMapping("/film*")
-    public String getFilm(@RequestParam int id, Model model){
+    @GetMapping("/film")
+    public String getFilm(@RequestParam int id, Model model) {
         RatedFilm ratedFilm = filmService.getRatedFilm(id);
-        if (SecurityService.safeGet() != null){
+        if (SecurityService.safeGet() != null) {
             Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
             model.addAttribute("userRatingMap", userRating);
         }

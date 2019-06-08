@@ -2,7 +2,6 @@ package filmservice.repository;
 
 import filmservice.model.Film;
 import filmservice.model.Rating;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,9 +13,13 @@ public interface FilmRepository {
 
     Film get(int id);
 
-    List<Film> getAll();
+    List<Film> getAll(int page);
 
-    List<Film> getByTitle(String title);
+    List<Film> getByTitle(String title, int page);
 
     Rating save(Rating rating);
+
+    int recordsCount();
+
+    int recordsCount(String title);
 }

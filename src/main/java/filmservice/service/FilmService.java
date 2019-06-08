@@ -19,13 +19,17 @@ public interface FilmService {
 
     void update(Film film);
 
-    List<Film> getAll();
+    List<Film> getAll(int page);
 
-    List<RatedFilm> getAllRatedFilm();
+    List<RatedFilm> getAllRatedFilm(int page);
 
-    List<Film> getByTitle(String title);
+    List<Film> getByTitle(String title, int page);
 
-    List<RatedFilm> getRatedFilmByTitle(String title);
+    List<RatedFilm> getRatedFilmByTitle(String title, int page);
 
     Rating save(Rating rating);
+
+    int recordsCount();
+
+    int recordsCount(String title);
 }

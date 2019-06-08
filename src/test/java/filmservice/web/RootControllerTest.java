@@ -26,7 +26,7 @@ class RootControllerTest extends AbstractControllerTest {
                         new AssertionMatcher<List<Film>>() {
                             @Override
                             public void assertion(List<Film> actual) throws AssertionError {
-                                List<Film> films = filmService.getAll();
+                                List<Film> films = filmService.getAll(1);
                                 List<Film> filmsExp = FilmCreationHelper.getFilmsList();
                                 assertThat(films).isEqualTo(filmsExp);
                             }

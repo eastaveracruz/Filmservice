@@ -41,7 +41,7 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public RatedFilm getRatedFilm(int id){
+    public RatedFilm getRatedFilm(int id) {
         return new RatedFilm(get(id));
     }
 
@@ -52,31 +52,39 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> getAll() {
-        return repository.getAll();
+    public List<Film> getAll(int page) {
+        return repository.getAll(page);
     }
 
     @Override
-    public List<RatedFilm> getAllRatedFilm() {
-        List<Film> allFilm = getAll();
-        return allFilm.stream().map(RatedFilm::new).collect(Collectors.toList());
+    public List<RatedFilm> getAllRatedFilm(int page) {
+        return getAll(page).stream().map(RatedFilm::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<Film> getByTitle(String title) {
-        return repository.getByTitle(title);
+    public List<Film> getByTitle(String title, int page) {
+        return repository.getByTitle(title, page);
     }
 
     @Override
-    public List<RatedFilm> getRatedFilmByTitle(String title) {
-        List<Film> byTitle = getByTitle(title);
-        return byTitle.stream().map(RatedFilm::new).collect(Collectors.toList());
+    public List<RatedFilm> getRatedFilmByTitle(String title, int page) {
+        return getByTitle(title, page).stream().map(RatedFilm::new).collect(Collectors.toList());
     }
 
     @Override
-    public Rating save(Rating rating){
+    public Rating save(Rating rating) {
         Assert.notNull(rating, "rating must be not null");
         return repository.save(rating);
+    }
+
+    @Override
+    public int recordsCount() {
+        return repository.recordsCount();
+    }
+
+    @Override
+    public int recordsCount(String title) {
+        return repository.recordsCount(title);
     }
 
 }

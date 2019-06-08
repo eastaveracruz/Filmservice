@@ -32,7 +32,7 @@
         </sec:authorize>
     </div>
     <div align="left" id="search">
-        <form action="./" method="get">
+        <form action="./1" method="get">
             <input id="searchByTitle" type="text" name="title" id="serchText"
                    placeholder="<fmt:message key="app.searchPlaceHolder"/>">
             <button type="submit"><fmt:message key="app.searchButton"/></button>

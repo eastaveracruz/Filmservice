@@ -45,6 +45,7 @@
             </tr>
         </c:forEach>
     </table>
+        ${paginationBlock}
 </div>
 
 <jsp:include page="parts/footer.jsp"/>

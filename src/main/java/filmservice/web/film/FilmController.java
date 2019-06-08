@@ -28,7 +28,7 @@ public class FilmController {
 
     public List<Film> getAll(){
         log.info("get all films");
-        return service.getAll();
+        return service.getAll(1);
     }
 
     public Film create(Film film) {
