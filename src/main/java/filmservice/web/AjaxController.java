@@ -5,10 +5,9 @@ import filmservice.service.FilmService;
 import filmservice.service.SecurityService;
 import filmservice.web.user.AbstractUserController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
 import java.util.Map;
@@ -39,6 +38,13 @@ public class AjaxController extends AbstractUserController {
             return String.format(Locale.ENGLISH, "{ \"scs\": true, \"rating\": %.1f}", avgRating);
         }
         return "{scs: false}";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(path = "/delete")
+    public String deleteFilm(@RequestParam int id){
+        filmService.delete(id);
+        return "true";
     }
 
 }

@@ -33,3 +33,18 @@ $(".assessment").submit(function () {
 
 var text = $(".content .description").text();
 $(".content .description").text(text.substr(0, 200) + "...");
+
+
+$(".deleteFilm").click(function () {
+    console.log("hoho");
+    var obj = $(this);
+    $.post({
+        url: $(this).attr('href'),
+        success: function (data) {
+            if (data === "true") {
+                obj.parents("tr").remove();
+            }
+        }
+    });
+    return false;
+});

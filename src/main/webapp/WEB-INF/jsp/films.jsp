@@ -42,10 +42,13 @@
                             ${film.avgRating==-1?"-":film.avgRating}
                     </h2>
                 </td>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <td valign="top"><a class="deleteFilm" href="./ajax/delete?id=${film.id}">x</a></td>
+                </sec:authorize>
             </tr>
         </c:forEach>
     </table>
-        ${paginationBlock}
+    ${paginationBlock}
 </div>
 
 <jsp:include page="parts/footer.jsp"/>
