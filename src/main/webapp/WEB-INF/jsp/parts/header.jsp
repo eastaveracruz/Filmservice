@@ -38,4 +38,17 @@
             <button type="submit"><fmt:message key="app.searchButton"/></button>
         </form>
     </div>
+    <div align="right" id="sort">
+        <form action="./1" method="get">
+            <select name="sort">
+                <option value="title_asc">Title  | ascending</option>
+                <option value="title_desc">Title  | descending</option>
+                <option value="genre_asc">Genre  | ascending</option>
+                <option value="genre_desc">Genre  | descending</option>
+                <option value="rating_asc">Rating | ascending</option>
+                <option value="rating_desc">Rating | descending</option>
+            </select>
+            <button type="submit">Sort</button>
+        </form>
+    </div>
 </header>

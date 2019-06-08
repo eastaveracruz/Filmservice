@@ -1,20 +1,21 @@
 package filmservice.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.persistence.*;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-
-@NamedNativeQuery(
-        name = Film.GET_ALL_WITH_RATING,
-        query = "select f.title, f.image, f.description, f.genre, r.rating\n" +
-                "from films f  right join  (select r.film_id, avg(r.rating) as rating from ratings r group by r.film_id) r\n" +
-                "    on f.id = r.film_id")
+@NamedNativeQueries({
+        @NamedNativeQuery(name = Film.GET_ALL_SORT_TITLE_ACS, query = "select * from films "),
+        @NamedNativeQuery(name = Film.GET_BY_TITLE, query = "select * from films where upper(title) like ")
+})
 @NamedQueries({
         @NamedQuery(name = Film.GET_ALL, query = "SELECT f FROM Film f"),
-        @NamedQuery(name = Film.GET_BY_TITLE, query = "SELECT f FROM Film f WHERE upper(f.title) LIKE upper(:title)"),
+//        @NamedQuery(name = Film.GET_BY_TITLE, query = "SELECT f FROM Film f WHERE upper(f.title) LIKE upper(:title)"),
         @NamedQuery(name = Film.DELETE, query = "DELETE FROM Film f WHERE f.id=:id"),
 })
 @Entity
@@ -23,7 +24,7 @@ public class Film implements BaseEntity {
     public static final int START_SEQ = 1;
 
     public static final String GET_ALL = "Film.get_all";
-    public static final String GET_ALL_WITH_RATING = "Film.get_all_with_rating";
+    public static final String GET_ALL_SORT_TITLE_ACS = "GET_ALL_SORT_TITLE_ACS";
     public static final String GET_BY_TITLE = "Film.get_by_title";
     public static final String DELETE = "Film.delete";
 
@@ -50,6 +51,39 @@ public class Film implements BaseEntity {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "film_id")
     private List<Rating> listRating;
+
+    @Transient
+    private MultipartFile file;
+
+    @Transient
+    private String rawDate;
+
+    @Transient
+    private String ex_file;
+
+    public String getEx_file() {
+        return ex_file;
+    }
+
+    public void setEx_file(String ex_file) {
+        this.ex_file = ex_file;
+    }
+
+    public String getRawDate() {
+        return rawDate;
+    }
+
+    public void setRawDate(String rawDate) {
+        this.rawDate = rawDate;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public LocalDate getDate() {
         return date;
@@ -83,7 +117,7 @@ public class Film implements BaseEntity {
         this.id = id;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

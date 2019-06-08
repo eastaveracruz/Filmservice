@@ -59,7 +59,7 @@ public class Rating implements BaseEntity {
         return this.id == null;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

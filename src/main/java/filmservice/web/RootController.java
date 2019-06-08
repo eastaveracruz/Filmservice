@@ -4,9 +4,11 @@ import filmservice.model.Film;
 import filmservice.model.RatedFilm;
 import filmservice.model.Rating;
 import filmservice.model.User;
+import filmservice.model.util.Sort;
 import filmservice.service.FilmService;
 import filmservice.service.SecurityService;
 import filmservice.service.UserService;
+import filmservice.util.DateTimeUtil;
 import filmservice.util.FileUtil;
 import filmservice.util.Pagination;
 import filmservice.validator.UserValidator;
@@ -54,21 +56,29 @@ public class RootController {
     }
 
     @GetMapping("/{page}")
-    public String films(@PathVariable Integer page, @RequestParam(required = false) String title, Model model) {
+    public String films(@PathVariable Integer page,
+                        @RequestParam(required = false) String title,
+                        @RequestParam(required = false) String sort,
+                        Model model) {
+
         String paginationBlock = "";
         List filmsList = null;
         int recordsCount;
+        Sort sortObj = Sort.init(sort);
+
         Map<String, String> parameters = new HashMap();
+        parameters.put("sort", sortObj.getOriginalString());
 
         if (title == null || "".equals(title)) {
+
             recordsCount = filmService.recordsCount();
             page = Pagination.pageValid(page, recordsCount);
-            filmsList = filmService.getAllRatedFilm(page);
+            filmsList = filmService.getAllRatedFilm(page, sortObj);
         } else {
             parameters.put("title", title);
             recordsCount = filmService.recordsCount(title);
             page = Pagination.pageValid(page, recordsCount);
-            filmsList = filmService.getRatedFilmByTitle(title, page);
+            filmsList = filmService.getRatedFilmByTitle(title, page, sortObj);
         }
 
         paginationBlock = Pagination.generatePaginationBlock(page, recordsCount, parameters);
@@ -96,49 +106,74 @@ public class RootController {
 
     @RequestMapping("/add")
     public String add(Model model) {
+        model.addAttribute("title", "Add New Film");
+        model.addAttribute("action", "./film/add");
         model.addAttribute("film", new Film());
         return "add";
     }
 
     @PostMapping("/film/add")
-    public String addFilm(@RequestParam("file") MultipartFile file,
-                          @RequestParam("title") String title,
-                          @RequestParam("description") String description,
-                          @RequestParam("genre") String genre,
-                          @RequestParam("date") String date) {
-
-//        File download
-        File uploadedFile = null;
-        String pathTodirecotry = "/resources/films_img";
-        try {
-            File directory = new File(servletContext.getRealPath(pathTodirecotry));
-//          https://stackoverflow.com/questions/825678/what-is-the-best-way-to-generate-a-unique-and-short-file-name-in-java
-            String ext = file.getOriginalFilename().substring(file.getOriginalFilename().length() - 3);
-            uploadedFile = FileUtil.uploadFile(directory, file, String.format("%s_%s.%s", title, RandomStringUtils.randomAlphanumeric(10), ext));
-            log.info("Файл успешно загружен: {}", uploadedFile.getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
+    public String addFilm(@ModelAttribute("film") Film film, Model model) {
+        if (film.getId() == null) {
+            if (film.getRawDate().isEmpty() && film.getTitle().isEmpty() && film.getFile().isEmpty() && film.getDescription().isEmpty()) {
+                model.addAttribute("error", "заполните все поля");
+                model.addAttribute("title", "Add New Film");
+                model.addAttribute("action", "./film/add");
+                return "add";
+            }
+        } else {
+            edit(film, model);
         }
 
-//        Create new Film
-        LocalDate filmDate = LocalDate.parse(date);
-        Film newFilm = filmService.create(new Film(title, String.format(".%s/%s", pathTodirecotry, uploadedFile.getName()), description, genre, filmDate));
+        fileDowload(film);
+
+        LocalDate filmDate = LocalDate.parse(film.getRawDate());
+        film.setDate(filmDate);
+        Film newFilm = filmService.create(film);
         log.info("The database entry created successfully: {}", newFilm.toString());
 
+        model.addAttribute("error", "фильм добавлен");
         return "redirect:/add";
+    }
+
+    @GetMapping("/edit")
+    public String edit(@RequestParam int id, Model model) {
+        Film film = filmService.get(id);
+        film.setRawDate(DateTimeUtil.toString(film.getDate()));
+        model.addAttribute("title", "Edit " + film.getTitle());
+        model.addAttribute("film", film);
+        model.addAttribute("action", "./edit");
+        return "add";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@ModelAttribute("film") Film film, Model model) {
+        Film exFilm = filmService.get(film.getId());
+        exFilm.setTitle(film.getTitle());
+        exFilm.setDescription(film.getDescription());
+
+        if (!film.getFile().isEmpty()) {
+            fileDowload(film);
+            exFilm.setImage(film.getImage());
+        }
+
+        LocalDate filmDate = LocalDate.parse(film.getRawDate());
+        exFilm.setDate(filmDate);
+
+        Film newFilm = filmService.create(exFilm);
+        log.info("The database entry created successfully: {}", newFilm.toString());
+        return "redirect:/film?id=" + film.getId();
     }
 
 
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
-
         return "registration";
     }
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
-
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "registration";
@@ -157,6 +192,21 @@ public class RootController {
             model.addAttribute("message", "Logged out successfully");
         }
         return "login";
+    }
+
+    public void fileDowload(Film film) {
+        MultipartFile file = film.getFile();
+        File uploadedFile = null;
+        String pathTodirecotry = "/resources/films_img";
+        try {
+            File directory = new File(servletContext.getRealPath(pathTodirecotry));
+            String ext = file.getOriginalFilename().substring(file.getOriginalFilename().length() - 3);
+            uploadedFile = FileUtil.uploadFile(directory, file, String.format("%s_%s.%s", film.getTitle(), RandomStringUtils.randomAlphanumeric(10), ext));
+            log.info("Файл успешно загружен: {}", uploadedFile.getAbsolutePath());
+            film.setImage(String.format(".%s/%s", pathTodirecotry, uploadedFile.getName()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -50,7 +50,7 @@ public class RatedFilm implements BaseEntity {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

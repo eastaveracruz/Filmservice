@@ -17,6 +17,7 @@
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/**/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/add" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/edit*" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/*" access="permitAll()"/>
         <intercept-url pattern="/film" access="permitAll()"/>
         <intercept-url pattern="/registration" access="isAnonymous()"/>

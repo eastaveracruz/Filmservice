@@ -2,6 +2,7 @@ package filmservice.repository;
 
 import filmservice.model.Film;
 import filmservice.model.Rating;
+import filmservice.model.util.Sort;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface FilmRepository {
 
     Film get(int id);
 
-    List<Film> getAll(int page);
+    List<Film> getAll(int page, Sort sort);
 
-    List<Film> getByTitle(String title, int page);
+    List getByTitle(String title, int page, Sort sort);
 
     Rating save(Rating rating);
 

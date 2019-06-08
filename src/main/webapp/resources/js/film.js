@@ -48,3 +48,10 @@ $(".deleteFilm").click(function () {
     });
     return false;
 });
+
+// $("#addFilm").submit(function () {
+//     var dateVal = $("#addFilm #date").val();
+//     $("#addFilm #hiddenDate").val(dateVal);
+// });
+
+

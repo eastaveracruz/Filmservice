@@ -1,12 +1,9 @@
 package filmservice.util;
 
 import filmservice.Settings;
-import filmservice.model.BaseEntity;
-import filmservice.model.DTO.FilmTO;
-import filmservice.model.Film;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +16,7 @@ public class Pagination {
     private Pagination() {
     }
 
-    public static <E> List<E> getPaginatedResult(TypedQuery<E> query, int page) {
+    public static <E> List<E> getPaginatedResult(Query query, int page) {
         query.setFirstResult((page - 1) * maxResult);
         query.setMaxResults(maxResult);
         return query.getResultList();

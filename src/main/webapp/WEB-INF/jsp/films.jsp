@@ -30,6 +30,9 @@
                             <input type="submit" value="vote">
                         </form>
                     </sec:authorize>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
+                        <a href="./edit?id=${film.id}">EDIT FILM</a>
+                    </sec:authorize>
                 </td>
                 <td valign="top">
                     <h3><a href="./film?id=${film.id}" target="_blank">${film.title}</a></h3>
@@ -43,7 +46,7 @@
                     </h2>
                 </td>
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
-                <td valign="top"><a class="deleteFilm" href="./ajax/delete?id=${film.id}">x</a></td>
+                    <td valign="top"><a class="deleteFilm" href="./ajax/delete?id=${film.id}">x</a></td>
                 </sec:authorize>
             </tr>
         </c:forEach>

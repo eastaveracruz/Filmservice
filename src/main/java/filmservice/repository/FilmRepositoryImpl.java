@@ -2,6 +2,7 @@ package filmservice.repository;
 
 import filmservice.model.Film;
 import filmservice.model.Rating;
+import filmservice.model.util.Sort;
 import filmservice.util.Pagination;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -19,6 +23,7 @@ public class FilmRepositoryImpl implements FilmRepository {
 
     @PersistenceContext
     private EntityManager em;
+
 
     @Override
     @Transactional
@@ -43,16 +48,26 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     @Override
-    public List<Film> getAll(int page) {
-        TypedQuery<Film> namedQuery = em.createNamedQuery(Film.GET_ALL, Film.class);
-        return Pagination.getPaginatedResult(namedQuery, page);
+    public List<Film> getAll(int page, Sort sort) {
+//        CriteriaQuery<Film> querry = sortSetting(sort);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Film> querry = cb.createQuery(Film.class);
+        Root<Film> root = querry.from(Film.class);
+        root.join("rating");
+        querry.select(root);
+
+
+        TypedQuery<Film> typedQuery = em.createQuery(querry);
+        return Pagination.getPaginatedResult(typedQuery, page);
     }
 
     @Override
-    public List<Film> getByTitle(String title, int page) {
-        TypedQuery<Film> namedQuery = em.createNamedQuery(Film.GET_BY_TITLE, Film.class);
-        namedQuery.setParameter("title", '%' + title + '%');
-        return Pagination.getPaginatedResult(namedQuery, page);
+    public List<Film> getByTitle(String title, int page, Sort sort) {
+        CriteriaQuery<Film> querry = sortSetting(sort, title);
+
+        TypedQuery<Film> typedQuery = em.createQuery(querry);
+
+        return Pagination.getPaginatedResult(typedQuery, page);
     }
 
     @Override
@@ -78,5 +93,27 @@ public class FilmRepositoryImpl implements FilmRepository {
                 .setParameter(1, '%' + title + '%')
                 .getSingleResult();
         return count.intValue();
+    }
+
+    private CriteriaQuery<Film> sortSetting(Sort sort, String... arg) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Film> querry = cb.createQuery(Film.class);
+        Root<Film> root = querry.from(Film.class);
+        querry.select(root);
+
+        switch (sort.getDirections().toLowerCase()) {
+            case "asc":
+                querry.orderBy(cb.asc(root.get(sort.getString())));
+                break;
+            case "desc":
+                querry.orderBy(cb.desc(root.get(sort.getString())));
+                break;
+        }
+
+        if (arg.length != 0) {
+            querry.where(cb.like(root.get("title"), "%" + arg[0] + "%"));
+        }
+
+        return querry;
     }
 }

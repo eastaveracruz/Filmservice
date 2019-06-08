@@ -3,10 +3,12 @@ package filmservice.service;
 import filmservice.model.Film;
 import filmservice.model.RatedFilm;
 import filmservice.model.Rating;
+import filmservice.model.util.Sort;
 import filmservice.repository.FilmRepository;
 import filmservice.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -17,14 +19,13 @@ import static filmservice.util.ValidationUtil.checkNotFoundWithId;
 @Service
 public class FilmServiceImpl implements FilmService {
 
-    private final FilmRepository repository;
-
     @Autowired
-    public FilmServiceImpl(FilmRepository repository) {
-        this.repository = repository;
-    }
+    private FilmRepository repository;
+
+
 
     @Override
+    @Transactional
     public Film create(Film film) {
         Assert.notNull(film, "film must be not null");
         return checkNotFoundWithId(repository.save(film), film.getId());
@@ -52,23 +53,23 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> getAll(int page) {
-        return repository.getAll(page);
+    public List<Film> getAll(int page, Sort sort) {
+        return repository.getAll(page, sort);
     }
 
     @Override
-    public List<RatedFilm> getAllRatedFilm(int page) {
-        return getAll(page).stream().map(RatedFilm::new).collect(Collectors.toList());
+    public List<RatedFilm> getAllRatedFilm(int page, Sort sort) {
+        return getAll(page, sort).stream().map(RatedFilm::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<Film> getByTitle(String title, int page) {
-        return repository.getByTitle(title, page);
+    public List<Film> getByTitle(String title, int page, Sort sort) {
+        return repository.getByTitle(title, page, sort);
     }
 
     @Override
-    public List<RatedFilm> getRatedFilmByTitle(String title, int page) {
-        return getByTitle(title, page).stream().map(RatedFilm::new).collect(Collectors.toList());
+    public List<RatedFilm> getRatedFilmByTitle(String title, int page, Sort sort) {
+        return getByTitle(title, page, sort).stream().map(RatedFilm::new).collect(Collectors.toList());
     }
 
     @Override

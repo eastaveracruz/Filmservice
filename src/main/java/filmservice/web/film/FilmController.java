@@ -2,6 +2,7 @@ package filmservice.web.film;
 
 import filmservice.model.Film;
 import filmservice.model.User;
+import filmservice.model.util.Sort;
 import filmservice.service.FilmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class FilmController {
 
     public List<Film> getAll(){
         log.info("get all films");
-        return service.getAll(1);
+        return service.getAll(1, Sort.init("title_asc"));
     }
 
     public Film create(Film film) {

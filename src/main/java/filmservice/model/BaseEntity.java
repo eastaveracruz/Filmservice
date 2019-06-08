@@ -5,5 +5,5 @@ public interface BaseEntity {
 
     void setId(int id);
 
-    int getId();
+    Integer getId();
 }

@@ -30,4 +30,6 @@
         <button type="submit">Submit</button>
     </form:form>
 </div>
+
+
 <jsp:include page="parts/footer.jsp"/>

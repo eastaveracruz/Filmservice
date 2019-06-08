@@ -82,7 +82,7 @@ public class User implements BaseEntity {
     }
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

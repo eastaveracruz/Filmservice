@@ -2,6 +2,7 @@ package filmservice.service;
 
 import filmservice.Profiles;
 import filmservice.model.Film;
+import filmservice.model.util.Sort;
 import filmservice.util.assertion.FilmCreationHelper;
 import filmservice.util.exception.NotFoundException;
 import filmservice.web.TimingExtension;
@@ -44,7 +45,7 @@ public class FilmServiceImplTest {
 
     @Test
     public void getAll() {
-        List<Film> films = service.getAll(1);
+        List<Film> films = service.getAll(1, Sort.init("title_asc"));
         List<Film> filmsExp = FilmCreationHelper.getFilmsList();
         assertThat(films).isEqualTo(filmsExp);
     }
@@ -52,7 +53,7 @@ public class FilmServiceImplTest {
     @Test
     void getByTitle() {
         String title = "Film 01";
-        List<Film> films = service.getByTitle(title, 1);
+        List<Film> films = service.getByTitle(title, 1, Sort.init("title_asc"));
         List<Film> filmsExp = FilmCreationHelper.getFilmsList().stream().filter(film -> film.getTitle().contains(title)).collect(Collectors.toList());
         assertThat(films).isEqualTo(filmsExp);
     }
@@ -67,7 +68,7 @@ public class FilmServiceImplTest {
     @Test
     void create() {
         service.create(FILM);
-        List<Film> films = service.getAll(1);
+        List<Film> films = service.getAll(1, Sort.init("title_asc"));
 
         List<Film> filmsExp = FilmCreationHelper.getFilmsList();
         filmsExp.add(FILM);
@@ -79,7 +80,7 @@ public class FilmServiceImplTest {
     @Test
     void delete() {
         service.delete(ID);
-        List<Film> films = service.getAll(1);
+        List<Film> films = service.getAll(1, Sort.init("title_asc"));
 
         List<Film> filmsExp = FilmCreationHelper.getFilmsList();
         Film filmsRemove = filmsExp.stream().filter(film -> film.getId() == ID).findFirst().get();
