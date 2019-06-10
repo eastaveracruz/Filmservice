@@ -2,6 +2,9 @@ package filmservice.model.util;
 
 public class Sort {
 
+    public static final String TITLE_ACS = "title_asc";
+    public static final String TITLE_DESC = "title_desc";
+
     private String directions;
     private String string;
     private String originalString;
@@ -12,9 +15,13 @@ public class Sort {
         this.originalString = originalString;
     }
 
+    public static Sort init() {
+        return Sort.init(TITLE_ACS);
+    }
+
     public static Sort init(String string) {
 
-        if (string == null) {
+        if (string == null || !string.contains("_")) {
             return new Sort("asc", "title", "title_asc");
         }
 

@@ -56,14 +56,6 @@ public class FilmRepositoryImpl implements FilmRepository {
 
     @Override
     @Transactional
-    public List<Film> getByTitle(String title, int page, GetParameters parameters) {
-        CriteriaQuery<Film> querry = querrySetting(parameters);
-        TypedQuery<Film> typedQuery = em.createQuery(querry);
-        return Pagination.getPaginatedResult(typedQuery, page);
-    }
-
-    @Override
-    @Transactional
     public int recordsCount(GetParameters parameters) {
         CriteriaQuery<Film> querry = querrySetting(parameters, "count");
         TypedQuery typedQuery = em.createQuery(querry);
@@ -112,7 +104,6 @@ public class FilmRepositoryImpl implements FilmRepository {
         }
 
         /*Assessment*/
-        Predicate inPredicate = null;
         if (parameters.isAssessmentExist() && parameters.getUserId() != null) {
 
             List list = em.createQuery("SELECT r.filmId FROM Rating r where r.userId = :userId")
@@ -120,9 +111,9 @@ public class FilmRepositoryImpl implements FilmRepository {
                     .getResultList();
 
             if (parameters.getAssessment()) {
-                predicates.add(inPredicate = root.get("id").in(list));
+                predicates.add(root.get("id").in(list));
             } else {
-                predicates.add(inPredicate = cb.not(root.get("id").in(list)));
+                predicates.add(cb.not(root.get("id").in(list)));
             }
         }
 
@@ -130,7 +121,6 @@ public class FilmRepositoryImpl implements FilmRepository {
             Predicate[] predicatesArray = predicates.stream().toArray(Predicate[]::new);
             querry.where(predicatesArray);
         }
-
 
         return querry;
     }

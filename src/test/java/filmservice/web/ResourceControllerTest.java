@@ -16,6 +16,11 @@ public class ResourceControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.valueOf("text/css")))
                 .andExpect(status().isOk());
+        mockMvc.perform(get("/resources/js/film.js"))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.valueOf("application/javascript")))
+                .andExpect(status().isOk());
+
     }
 
 }

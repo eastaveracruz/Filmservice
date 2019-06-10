@@ -35,8 +35,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles(Profiles.ACTIVE_DB)
 public class AbstractControllerTest {
     protected static final String REST_URL = AdminRestController.REST_URL + "/";
-    protected static final int ADMIN_ID = 6;
-    protected static final int USER_ID = 1;
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
 
     static {

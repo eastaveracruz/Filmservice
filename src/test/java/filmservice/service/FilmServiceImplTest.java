@@ -1,7 +1,9 @@
 package filmservice.service;
 
 import filmservice.Profiles;
+import filmservice.Settings;
 import filmservice.model.Film;
+import filmservice.model.util.Genre;
 import filmservice.model.util.GetParameters;
 import filmservice.model.util.Sort;
 import filmservice.util.assertion.FilmCreationHelper;
@@ -12,12 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,76 +37,77 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class FilmServiceImplTest {
 
     private static final Logger log = getLogger("result");
-    private static StringBuilder results = new StringBuilder();
 
     private static final int ID = 1;
-//    private static final Film FILM = new Film("testFilm", "no image", "some text", "test genre");
-    private static final Film FILM = null;
+    private static final Film FILM = new Film("title", "some image", "some description", Genre.ACTION.name(), LocalDate.parse("2020-05-06"));
+    private GetParameters getParameters = new GetParameters();
+
+    {
+        getParameters.setId(7);
+        getParameters.setSort(Sort.init());
+    }
 
     @Autowired
     private FilmService service;
 
     @Test
     public void getAll() {
-        List<Film> films = service.getAll(1, new GetParameters());
-        List<Film> filmsExp = FilmCreationHelper.getFilmsList();
-        assertThat(films).isEqualTo(filmsExp);
+        List<Film> films = service.getAll(1, getParameters);
+        List<Film> filmsExp = FilmCreationHelper.getFilmsList().stream().limit(Settings.PAGINATION_MAX_RESULTS).collect(Collectors.toList());
+        assertThat(films).usingElementComparatorIgnoringFields("rating", "file", "rawDate").isEqualTo(filmsExp);
     }
 
     @Test
     void getByTitle() {
         String title = "Film 01";
-        List<Film> films = service.getByTitle(title, 1, new GetParameters());
+        getParameters.setTitle(title);
+        List<Film> films = service.getAll(1, getParameters);
         List<Film> filmsExp = FilmCreationHelper.getFilmsList().stream().filter(film -> film.getTitle().contains(title)).collect(Collectors.toList());
-        assertThat(films).isEqualTo(filmsExp);
+        assertThat(films).usingElementComparatorIgnoringFields("rating", "file", "rawDate").isEqualTo(filmsExp);
     }
 
     @Test
     void get() {
         Film film = service.get(ID);
         Film filmExp = FilmCreationHelper.getFilmsList().stream().filter(film1 -> film.getId() == ID).findFirst().get();
-        assertThat(film).isEqualTo(filmExp);
+        assertThat(film).isEqualToIgnoringGivenFields(filmExp, "rating", "file", "rawDate");
     }
 
     @Test
     void create() {
-        service.create(FILM);
-        List<Film> films = service.getAll(1, new GetParameters());
-
-        List<Film> filmsExp = FilmCreationHelper.getFilmsList();
-        filmsExp.add(FILM);
-
-        //TODO FILM без id, тест проходит???
-        assertThat(films).isEqualTo(filmsExp);
+        Film filmExp = service.create(FILM);
+        Film film = service.get(filmExp.getId());
+        assertThat(film).isEqualToIgnoringGivenFields(filmExp, "rating", "file", "rawDate");
     }
 
     @Test
     void delete() {
+        List<Film> filmsS = service.getAll(1, getParameters);
         service.delete(ID);
-        List<Film> films = service.getAll(1, new GetParameters());
-
-        List<Film> filmsExp = FilmCreationHelper.getFilmsList();
-        Film filmsRemove = filmsExp.stream().filter(film -> film.getId() == ID).findFirst().get();
-        filmsExp.remove(filmsRemove);
-
-        assertThat(films).isEqualTo(filmsExp);
+        List<Film> filmsE = service.getAll(1, getParameters);
+        assertThat(filmsS).usingElementComparatorIgnoringFields("rating", "file", "rawDate").isNotEqualTo(filmsE);
     }
 
     @Test
     void update() {
         Film film = service.get(ID);
-
         film.setTitle("This is new Test Title");
         service.update(film);
-
         Film filmExp = service.get(ID);
-
         assertThat(film).isEqualTo(filmExp);
     }
 
     @Test
-    void getNotFound(){
+    void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(1000));
+    }
+
+    @Test
+    void sortByTitleDesc(){
+        getParameters.setSort(Sort.init(Sort.TITLE_DESC));
+        List<Film> films = service.getAll(1, getParameters);
+        List<Film> filmsExp = FilmCreationHelper.getFilmsList().stream().sorted(Comparator.comparing(Film::getTitle).reversed()).limit(Settings.PAGINATION_MAX_RESULTS).collect(Collectors.toList());
+        assertThat(films).usingElementComparatorIgnoringFields("rating", "file", "rawDate").isEqualTo(filmsExp);
     }
 
 }

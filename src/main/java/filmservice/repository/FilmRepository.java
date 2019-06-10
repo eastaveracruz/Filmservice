@@ -18,8 +18,6 @@ public interface FilmRepository {
 
     List<Film> getAll(int page, GetParameters parameters);
 
-    List getByTitle(String title, int page, GetParameters parameters);
-
     int recordsCount(GetParameters parameters);
 
 }

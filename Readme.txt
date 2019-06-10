@@ -3,24 +3,42 @@ username=root
 password=root
 databaseName=filmservice
 
-D:
-cd %FILM_ROOT%
-mvn clean package cargo:run -Dspring.profiles.active=postgres -Dmaven.test.skip=true
+Postgresql.bat
 
-***************************************************************************************
+----------------------------------------------------------------------------------------------------
 
 Запуск на Hsql
-%CATALINA_HOME%\bin\catalina.bat run
 
-d:
-cd %FILM_ROOT%
-mvn clean package -Dmaven.test.skip=true
+catalina.bat
+Hsql.bat
 
-COPY %FILM_ROOT%\target\filmservice.war %CATALINA_HOME%\webapps\
+----------------------------------------------------------------------------------------------------
+URL - http://localhost:8080/filmservice/
 
-{FILM_ROOT} - путь к проекту
+Пользователи:
+login: admin, password: admin, roles: admin, user
+login: user, password: user, roles: user
+login: user1, password: user, roles: user
+...
+login: user6, password: user, roles: user
+
+REV-3************************************************************************************************
+
+Комментарии к замечаниям:
+
+- case insensitive - чтобы Film и film - находило по обоим
+    исправил
+
+- if(title == null || "".equals(title)){
+  такое обычно делается каким-нибудь утилитным классом StringUtils.isEmpty(title)
+  Такой класс можно написать самому или подключить каккую-нибудь известную библиотеку, например Apache
+    Добавил Strings.isNullOrEmpty из com.google.common.base.Strings
+
+- <file>${FILM_ROOT}/log/filmservice.log</file>  - а где этот файл найти?
+    при старте приложения он появится по этому адресу
 
 
+REV-2*************************************************************************************************
 
 Комментарии к замечаниям:
 - README.TXT добавил

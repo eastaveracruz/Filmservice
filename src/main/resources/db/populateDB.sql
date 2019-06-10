@@ -30,8 +30,8 @@ VALUES ('ROLE_USER', 1),
        ('ROLE_USER', 4),
        ('ROLE_USER', 5),
        ('ROLE_USER', 6),
-       ('ROLE_ADMIN', 7),
-       ('ROLE_USER', 7);
+       ('ROLE_USER', 7),
+       ('ROLE_ADMIN', 7);
 
 
 INSERT INTO films (title, image, description, genre, date)

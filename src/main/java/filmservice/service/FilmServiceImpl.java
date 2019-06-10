@@ -49,11 +49,6 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public List<Film> getByTitle(String title, int page, GetParameters parameters) {
-        return repository.getByTitle(title, page, parameters);
-    }
-
-    @Override
     public int recordsCount(GetParameters parameters) {
         return repository.recordsCount(parameters);
     }

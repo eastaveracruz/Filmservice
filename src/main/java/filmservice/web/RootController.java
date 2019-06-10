@@ -73,21 +73,15 @@ public class RootController {
         Sort sortObj = Sort.init(sort);
 
         GetParameters parameters = new GetParameters();
-        parameters.initId();
+        parameters.setId(SecurityService.safeGet() != null ? SecurityService.getId() : null);
         parameters.setAssessment(assessment);
         parameters.setGenre(genre);
         parameters.setSort(sortObj);
         parameters.setTitle(title);
 
-        if (title == null || "".equals(title)) {
-            recordsCount = filmService.recordsCount(parameters);
-            page = Pagination.pageValid(page, recordsCount);
-            filmsList = filmService.getAll(page, parameters);
-        } else {
-            recordsCount = filmService.recordsCount(parameters);
-            page = Pagination.pageValid(page, recordsCount);
-            filmsList = filmService.getByTitle(title, page, parameters);
-        }
+        recordsCount = filmService.recordsCount(parameters);
+        page = Pagination.pageValid(page, recordsCount);
+        filmsList = filmService.getAll(page, parameters);
 
         String paginationBlock = Pagination.generatePaginationBlock(page, recordsCount, parameters.toString());
 
@@ -127,11 +121,8 @@ public class RootController {
     @PostMapping("/film/add")
     public String addFilm(@ModelAttribute("film") Film film, Model model) {
 
-        if (film.getRawDate().isEmpty() && film.getTitle().isEmpty() && film.getFile().isEmpty() && film.getDescription().isEmpty()) {
-            model.addAttribute("message", "<span class=error>Заполните все поля.</span>");
-            model.addAttribute("title", "Add new film");
-            model.addAttribute("action", "./film/add");
-            return "add";
+        if (film.getRawDate().isEmpty() || film.getTitle().isEmpty() || film.getFile().isEmpty() || film.getDescription().isEmpty()) {
+            return "redirect:/add";
         }
 
         fileDowload(film);

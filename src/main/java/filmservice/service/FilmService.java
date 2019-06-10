@@ -21,8 +21,6 @@ public interface FilmService {
 
     List<Film> getAll(int page, GetParameters parameters);
 
-    List<Film> getByTitle(String title, int page, GetParameters parameters);
-
     int recordsCount(GetParameters parameters);
 
 }

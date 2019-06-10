@@ -50,8 +50,6 @@ public class Film implements BaseEntity {
     @Transient
     private String rawDate;
 
-    @Transient
-    private String ex_file;
 
     public Film() {
     }
@@ -92,13 +90,12 @@ public class Film implements BaseEntity {
                 Objects.equals(genre, film.genre) &&
                 Objects.equals(date, film.date) &&
                 Objects.equals(file, film.file) &&
-                Objects.equals(rawDate, film.rawDate) &&
-                Objects.equals(ex_file, film.ex_file);
+                Objects.equals(rawDate, film.rawDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, image, description, genre, date, rating, file, rawDate, ex_file);
+        return Objects.hash(id, title, image, description, genre, date, rating, file, rawDate);
     }
 
     @Override
@@ -179,14 +176,6 @@ public class Film implements BaseEntity {
 
     public void setRawDate(String rawDate) {
         this.rawDate = rawDate;
-    }
-
-    public String getEx_file() {
-        return ex_file;
-    }
-
-    public void setEx_file(String ex_file) {
-        this.ex_file = ex_file;
     }
 
 }

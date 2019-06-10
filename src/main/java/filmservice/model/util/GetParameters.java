@@ -1,6 +1,6 @@
 package filmservice.model.util;
 
-import filmservice.service.SecurityService;
+import com.google.common.base.Strings;
 
 public class GetParameters {
 
@@ -40,12 +40,8 @@ public class GetParameters {
         this.sort = sort;
     }
 
-    public Integer initId() {
-        if (SecurityService.safeGet() != null) {
-            userId = SecurityService.getId();
-            return userId;
-        }
-        return null;
+    public void setId(Integer id) {
+        this.userId = id;
     }
 
     public Integer getUserId() {
@@ -79,7 +75,7 @@ public class GetParameters {
     }
 
     public boolean isTitleExist() {
-        return this.title != null;
+        return !Strings.isNullOrEmpty(this.title);
     }
 
     public boolean isUserIdExist(){
