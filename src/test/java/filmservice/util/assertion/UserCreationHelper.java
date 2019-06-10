@@ -1,6 +1,6 @@
 package filmservice.util.assertion;
 
-import filmservice.model.Role;
+import filmservice.model.util.Role;
 import filmservice.model.User;
 
 import java.util.ArrayList;

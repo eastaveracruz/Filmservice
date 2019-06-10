@@ -1,4 +1,4 @@
-package filmservice.model;
+package filmservice.model.util;
 
 import org.springframework.security.core.GrantedAuthority;
 

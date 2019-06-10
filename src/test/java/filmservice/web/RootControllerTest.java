@@ -1,6 +1,7 @@
 package filmservice.web;
 
 import filmservice.model.Film;
+import filmservice.model.util.GetParameters;
 import filmservice.model.util.Sort;
 import filmservice.util.assertion.FilmCreationHelper;
 import org.assertj.core.matcher.AssertionMatcher;
@@ -27,7 +28,7 @@ class RootControllerTest extends AbstractControllerTest {
                         new AssertionMatcher<List<Film>>() {
                             @Override
                             public void assertion(List<Film> actual) throws AssertionError {
-                                List<Film> films = filmService.getAll(1, Sort.init("title_asc"));
+                                List<Film> films = filmService.getAll(1, new GetParameters());
                                 List<Film> filmsExp = FilmCreationHelper.getFilmsList();
                                 assertThat(films).isEqualTo(filmsExp);
                             }

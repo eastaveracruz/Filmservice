@@ -1,7 +1,7 @@
 package filmservice.service;
 
 import filmservice.Profiles;
-import filmservice.model.Role;
+import filmservice.model.util.Role;
 import filmservice.model.User;
 import filmservice.util.assertion.UserCreationHelper;
 import filmservice.util.exception.NotFoundException;

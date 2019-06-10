@@ -13,6 +13,11 @@ public class Sort {
     }
 
     public static Sort init(String string) {
+
+        if (string == null) {
+            return new Sort("asc", "title", "title_asc");
+        }
+
         String[] parameters = string.split("_");
         String directions = parameters[1];
         String sortParameter = parameters[0];
@@ -32,6 +37,7 @@ public class Sort {
             case "title":
             case "genre":
             case "rating":
+            case "date":
                 str = sortParameter;
                 break;
             default:

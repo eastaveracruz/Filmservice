@@ -1,9 +1,11 @@
 package filmservice.web;
 
+import filmservice.AuthorizedUser;
 import filmservice.model.Film;
-import filmservice.model.RatedFilm;
 import filmservice.model.Rating;
 import filmservice.model.User;
+import filmservice.model.util.Genre;
+import filmservice.model.util.GetParameters;
 import filmservice.model.util.Sort;
 import filmservice.service.FilmService;
 import filmservice.service.SecurityService;
@@ -24,6 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -59,48 +64,54 @@ public class RootController {
     public String films(@PathVariable Integer page,
                         @RequestParam(required = false) String title,
                         @RequestParam(required = false) String sort,
+                        @RequestParam(required = false) String genre,
+                        @RequestParam(required = false) String assessment,
                         Model model) {
 
-        String paginationBlock = "";
-        List filmsList = null;
+        List filmsList;
         int recordsCount;
         Sort sortObj = Sort.init(sort);
 
-        Map<String, String> parameters = new HashMap();
-        parameters.put("sort", sortObj.getOriginalString());
+        GetParameters parameters = new GetParameters();
+        parameters.initId();
+        parameters.setAssessment(assessment);
+        parameters.setGenre(genre);
+        parameters.setSort(sortObj);
+        parameters.setTitle(title);
 
         if (title == null || "".equals(title)) {
-
-            recordsCount = filmService.recordsCount();
+            recordsCount = filmService.recordsCount(parameters);
             page = Pagination.pageValid(page, recordsCount);
-            filmsList = filmService.getAllRatedFilm(page, sortObj);
+            filmsList = filmService.getAll(page, parameters);
         } else {
-            parameters.put("title", title);
-            recordsCount = filmService.recordsCount(title);
+            recordsCount = filmService.recordsCount(parameters);
             page = Pagination.pageValid(page, recordsCount);
-            filmsList = filmService.getRatedFilmByTitle(title, page, sortObj);
+            filmsList = filmService.getByTitle(title, page, parameters);
         }
 
-        paginationBlock = Pagination.generatePaginationBlock(page, recordsCount, parameters);
+        String paginationBlock = Pagination.generatePaginationBlock(page, recordsCount, parameters.toString());
 
         if (SecurityService.safeGet() != null) {
             Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
             model.addAttribute("userRatingMap", userRating);
         }
+
         model.addAttribute("paginationBlock", paginationBlock);
         model.addAttribute("filmsList", filmsList);
         model.addAttribute("userList", userService.getAll());
+        model.addAttribute("user", SecurityService.safeGet() != null ? SecurityService.safeGet().getName() : null);
+        model.addAttribute("genre", Genre.values());
         return "films";
     }
 
     @GetMapping("/film")
     public String getFilm(@RequestParam int id, Model model) {
-        RatedFilm ratedFilm = filmService.getRatedFilm(id);
+        Film film = filmService.get(id);
         if (SecurityService.safeGet() != null) {
             Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
             model.addAttribute("userRatingMap", userRating);
         }
-        model.addAttribute("film", ratedFilm);
+        model.addAttribute("film", film);
         return "filmPage";
     }
 
@@ -109,31 +120,29 @@ public class RootController {
         model.addAttribute("title", "Add New Film");
         model.addAttribute("action", "./film/add");
         model.addAttribute("film", new Film());
+        model.addAttribute("genre", Genre.values());
         return "add";
     }
 
     @PostMapping("/film/add")
     public String addFilm(@ModelAttribute("film") Film film, Model model) {
-        if (film.getId() == null) {
-            if (film.getRawDate().isEmpty() && film.getTitle().isEmpty() && film.getFile().isEmpty() && film.getDescription().isEmpty()) {
-                model.addAttribute("error", "заполните все поля");
-                model.addAttribute("title", "Add New Film");
-                model.addAttribute("action", "./film/add");
-                return "add";
-            }
-        } else {
-            edit(film, model);
+
+        if (film.getRawDate().isEmpty() && film.getTitle().isEmpty() && film.getFile().isEmpty() && film.getDescription().isEmpty()) {
+            model.addAttribute("message", "<span class=error>Заполните все поля.</span>");
+            model.addAttribute("title", "Add new film");
+            model.addAttribute("action", "./film/add");
+            return "add";
         }
 
         fileDowload(film);
+        film.setRating(-1);
 
         LocalDate filmDate = LocalDate.parse(film.getRawDate());
         film.setDate(filmDate);
         Film newFilm = filmService.create(film);
         log.info("The database entry created successfully: {}", newFilm.toString());
 
-        model.addAttribute("error", "фильм добавлен");
-        return "redirect:/add";
+        return "redirect:/";
     }
 
     @GetMapping("/edit")
@@ -143,24 +152,30 @@ public class RootController {
         model.addAttribute("title", "Edit " + film.getTitle());
         model.addAttribute("film", film);
         model.addAttribute("action", "./edit");
+        model.addAttribute("genre", Genre.values());
         return "add";
     }
 
     @PostMapping("/edit")
-    public String edit(@ModelAttribute("film") Film film, Model model) {
-        Film exFilm = filmService.get(film.getId());
-        exFilm.setTitle(film.getTitle());
-        exFilm.setDescription(film.getDescription());
+    public String edit(@ModelAttribute("film") Film film, Model model) throws IOException {
+
+        Film originalFilm = filmService.get(film.getId());
+        originalFilm.setTitle(film.getTitle());
+        originalFilm.setDescription(film.getDescription());
+        originalFilm.setGenre(film.getGenre());
 
         if (!film.getFile().isEmpty()) {
             fileDowload(film);
-            exFilm.setImage(film.getImage());
+            new File(servletContext.getRealPath(originalFilm.getImage())).delete();
+            originalFilm.setImage(film.getImage());
         }
 
-        LocalDate filmDate = LocalDate.parse(film.getRawDate());
-        exFilm.setDate(filmDate);
+        if (!"".equals(film.getRawDate())) {
+            LocalDate filmDate = LocalDate.parse(film.getRawDate());
+            originalFilm.setDate(filmDate);
+        }
 
-        Film newFilm = filmService.create(exFilm);
+        Film newFilm = filmService.create(originalFilm);
         log.info("The database entry created successfully: {}", newFilm.toString());
         return "redirect:/film?id=" + film.getId();
     }

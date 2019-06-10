@@ -1,36 +1,28 @@
 package filmservice.service;
 
 import filmservice.model.Film;
-import filmservice.model.RatedFilm;
-import filmservice.model.Rating;
-import filmservice.model.util.Sort;
+import filmservice.model.util.GetParameters;
 import filmservice.util.exception.NotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface FilmService {
 
+    @Transactional
     Film create(Film film);
 
     void delete(int id) throws NotFoundException;
 
     Film get(int id) throws NotFoundException;
 
-    RatedFilm getRatedFilm(int id);
-
+    @Transactional
     void update(Film film);
 
-    List<Film> getAll(int page, Sort sort);
+    List<Film> getAll(int page, GetParameters parameters);
 
-    List<RatedFilm> getAllRatedFilm(int page, Sort sort);
+    List<Film> getByTitle(String title, int page, GetParameters parameters);
 
-    List<Film> getByTitle(String title, int page, Sort sort);
+    int recordsCount(GetParameters parameters);
 
-    List<RatedFilm> getRatedFilmByTitle(String title, int page, Sort sort);
-
-    Rating save(Rating rating);
-
-    int recordsCount();
-
-    int recordsCount(String title);
 }

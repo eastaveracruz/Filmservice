@@ -1,20 +1,8 @@
 const userAjaxUrl = "ajax/admin/users/";
 
-$("footer").click(getAllUsers);
-
-function getAllUsers() {
-    $.getJSON(
-        userAjaxUrl,
-        function (data) {
-            for (var i = 0, len = data.length; i < len; i++) {
-                console.log(data[i].login + " - " + data[i].password);
-                $("footer").append("<p>" + data[i].login + " - " + data[i].password + "</p>")
-            }
-        }
-    )
-}
-
+// Рейтинг
 $(".assessment").submit(function () {
+
     var filmId = $(this).attr('filmId');
     $.post({
         url: $(this).attr('action'),
@@ -31,27 +19,22 @@ $(".assessment").submit(function () {
     return false;
 });
 
+//Удаление
 var text = $(".content .description").text();
 $(".content .description").text(text.substr(0, 200) + "...");
 
 
 $(".deleteFilm").click(function () {
-    console.log("hoho");
-    var obj = $(this);
-    $.post({
-        url: $(this).attr('href'),
-        success: function (data) {
-            if (data === "true") {
-                obj.parents("tr").remove();
+    if (confirm("Удалить фильм?")) {
+        var obj = $(this);
+        $.post({
+            url: $(this).attr('href'),
+            success: function (data) {
+                if (data === "true") {
+                    obj.parents("tr").remove();
+                }
             }
-        }
-    });
+        });
+    }
     return false;
 });
-
-// $("#addFilm").submit(function () {
-//     var dateVal = $("#addFilm #date").val();
-//     $("#addFilm #hiddenDate").val(dateVal);
-// });
-
-

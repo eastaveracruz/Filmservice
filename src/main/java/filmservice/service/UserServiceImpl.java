@@ -1,6 +1,6 @@
 package filmservice.service;
 
-import filmservice.model.Role;
+import filmservice.model.util.Role;
 import filmservice.model.User;
 import filmservice.repository.UserRepository;
 import filmservice.util.exception.NotFoundException;

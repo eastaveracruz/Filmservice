@@ -15,6 +15,7 @@ public class FileUtil {
     private static final Logger log = LoggerFactory.getLogger(FileUtil.class);
 
     public static File uploadFile(File direcotry, MultipartFile file, String name) throws Exception {
+
         File uploadedFile = null;
 
             if (!file.isEmpty()) {

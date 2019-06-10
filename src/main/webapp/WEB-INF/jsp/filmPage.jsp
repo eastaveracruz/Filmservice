@@ -20,7 +20,7 @@
             </td>
             <td class="info">
                 <h2 filmId="${film.id}">
-                    ${film.avgRating==-1?"-":film.avgRating}
+                    ${film.rating==-1?"-":film.rating}
                 </h2>
             </td>
         </tr>
@@ -44,6 +44,9 @@
                         </select>
                         <input type="submit" value="vote">
                     </form>
+                </sec:authorize>
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                    <a href="./edit?id=${film.id}">EDIT FILM</a>
                 </sec:authorize>
             </td>
         </tr>

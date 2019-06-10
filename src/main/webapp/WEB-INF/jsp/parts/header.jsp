@@ -16,7 +16,7 @@
 </head>
 <body>
 <header>
-    <div id="menu">
+    <div id="menu" class="menu">
         <a href="${pageContext.request.contextPath}"><fmt:message key="app.home"/></a> |
         <sec:authorize access="hasRole('ROLE_ADMIN')">
             <a href="./add"><fmt:message key="app.addFilm"/></a> |
@@ -30,6 +30,9 @@
         <sec:authorize access="isAnonymous()">
             <a href="./registration"><fmt:message key="app.registration"/></a> |
         </sec:authorize>
+        <c:if test="${user != null}">
+            <span class="hello">Hello ${user}</span>
+        </c:if>
     </div>
     <div align="left" id="search">
         <form action="./1" method="get">
@@ -40,15 +43,28 @@
     </div>
     <div align="right" id="sort">
         <form action="./1" method="get">
-            <select name="sort">
-                <option value="title_asc">Title  | ascending</option>
-                <option value="title_desc">Title  | descending</option>
-                <option value="genre_asc">Genre  | ascending</option>
-                <option value="genre_desc">Genre  | descending</option>
-                <option value="rating_asc">Rating | ascending</option>
-                <option value="rating_desc">Rating | descending</option>
+            <sec:authorize access="isAuthenticated()">
+            <select name="assessment">
+                <option value="">-</option>
+                <option value="1">оценненные</option>
+                <option value="0">не оценненные</option>
             </select>
-            <button type="submit">Sort</button>
+            </sec:authorize>.
+            <select name="genre">
+                <option value="">-</option>
+                <c:forEach items="${genre}" var="g">
+                    <option value="${g}">${g}</option>
+                </c:forEach>
+            </select>
+            <select name="sort">
+                <option value="title_asc">Title | ascending</option>
+                <option value="title_desc">Title | descending</option>
+                <option value="date_desc">Date | ascending</option>
+                <option value="datee_asc">Date | descending</option>
+                <option value="rating_desc">Rating | ascending</option>
+                <option value="rating_asc">Rating | descending</option>
+            </select>
+            <button type="submit">Filter</button>
         </form>
     </div>
 </header>

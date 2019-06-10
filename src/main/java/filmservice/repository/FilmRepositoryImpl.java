@@ -1,7 +1,8 @@
 package filmservice.repository;
 
 import filmservice.model.Film;
-import filmservice.model.Rating;
+import filmservice.model.util.Genre;
+import filmservice.model.util.GetParameters;
 import filmservice.model.util.Sort;
 import filmservice.util.Pagination;
 import org.springframework.stereotype.Repository;
@@ -12,8 +13,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,9 +26,7 @@ public class FilmRepositoryImpl implements FilmRepository {
     @PersistenceContext
     private EntityManager em;
 
-
     @Override
-    @Transactional
     public Film save(Film film) {
         if (film.isNew()) {
             em.persist(film);
@@ -37,7 +37,6 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     @Override
-    @Transactional
     public boolean delete(int id) {
         return em.createNamedQuery(Film.DELETE).setParameter("id", id).executeUpdate() != 0;
     }
@@ -48,71 +47,90 @@ public class FilmRepositoryImpl implements FilmRepository {
     }
 
     @Override
-    public List<Film> getAll(int page, Sort sort) {
-//        CriteriaQuery<Film> querry = sortSetting(sort);
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Film> querry = cb.createQuery(Film.class);
-        Root<Film> root = querry.from(Film.class);
-        root.join("rating");
-        querry.select(root);
-
-
+    @Transactional
+    public List<Film> getAll(int page, GetParameters parameters) {
+        CriteriaQuery<Film> querry = querrySetting(parameters);
         TypedQuery<Film> typedQuery = em.createQuery(querry);
-        return Pagination.getPaginatedResult(typedQuery, page);
-    }
-
-    @Override
-    public List<Film> getByTitle(String title, int page, Sort sort) {
-        CriteriaQuery<Film> querry = sortSetting(sort, title);
-
-        TypedQuery<Film> typedQuery = em.createQuery(querry);
-
         return Pagination.getPaginatedResult(typedQuery, page);
     }
 
     @Override
     @Transactional
-    public Rating save(Rating rating) {
-        if (rating.isNew()) {
-            em.persist(rating);
-            return rating;
-        } else {
-            return em.merge(rating);
-        }
+    public List<Film> getByTitle(String title, int page, GetParameters parameters) {
+        CriteriaQuery<Film> querry = querrySetting(parameters);
+        TypedQuery<Film> typedQuery = em.createQuery(querry);
+        return Pagination.getPaginatedResult(typedQuery, page);
     }
 
     @Override
-    public int recordsCount() {
-        BigInteger count = (BigInteger) em.createNativeQuery("select count (*) from films").getSingleResult();
-        return count.intValue();
+    @Transactional
+    public int recordsCount(GetParameters parameters) {
+        CriteriaQuery<Film> querry = querrySetting(parameters, "count");
+        TypedQuery typedQuery = em.createQuery(querry);
+        Long result = (Long) typedQuery.getSingleResult();
+        return result.intValue();
     }
 
-    @Override
-    public int recordsCount(String title) {
-        BigInteger count = (BigInteger) em.createNativeQuery("select count (*) from films WHERE upper(title) LIKE upper(?)")
-                .setParameter(1, '%' + title + '%')
-                .getSingleResult();
-        return count.intValue();
-    }
-
-    private CriteriaQuery<Film> sortSetting(Sort sort, String... arg) {
+    private CriteriaQuery<Film> querrySetting(GetParameters parameters, String... args) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Film> querry = cb.createQuery(Film.class);
-        Root<Film> root = querry.from(Film.class);
-        querry.select(root);
+        CriteriaQuery querry;
+        Root<Film> root;
+        List<Predicate> predicates = new ArrayList<>();
 
-        switch (sort.getDirections().toLowerCase()) {
-            case "asc":
-                querry.orderBy(cb.asc(root.get(sort.getString())));
-                break;
-            case "desc":
-                querry.orderBy(cb.desc(root.get(sort.getString())));
-                break;
+        /*Переключение между режимом выборки и счетчика*/
+        if (args.length != 0 && args[0].equals("count")) {
+            querry = cb.createQuery();
+            root = querry.from(Film.class);
+            querry.select(cb.count(root));
+        } else {
+            querry = cb.createQuery(Film.class);
+            root = querry.from(Film.class);
+            querry.select(root);
+
+            /*Sorting*/
+            Sort sort = parameters.getSort();
+            switch (sort.getDirections().toLowerCase()) {
+                case "asc":
+                    querry.orderBy(cb.asc(root.get(sort.getString())));
+                    break;
+                case "desc":
+                    querry.orderBy(cb.desc(root.get(sort.getString())));
+                    break;
+            }
         }
 
-        if (arg.length != 0) {
-            querry.where(cb.like(root.get("title"), "%" + arg[0] + "%"));
+        /*Title*/
+        if (parameters.isTitleExist()) {
+            String title = parameters.getTitle();
+            querry.where(cb.like(root.get("title"), "%" + title + "%"));
         }
+
+        /*Genre*/
+        if (parameters.isGenreExist()) {
+            Genre genre = parameters.getGenre();
+            predicates.add(cb.equal(root.get("genre"), genre.name()));
+        }
+
+        /*Assessment*/
+        Predicate inPredicate = null;
+        if (parameters.isAssessmentExist() && parameters.getUserId() != null) {
+
+            List list = em.createQuery("SELECT r.filmId FROM Rating r where r.userId = :userId")
+                    .setParameter("userId", parameters.getUserId())
+                    .getResultList();
+
+            if (parameters.getAssessment()) {
+                predicates.add(inPredicate = root.get("id").in(list));
+            } else {
+                predicates.add(inPredicate = cb.not(root.get("id").in(list)));
+            }
+        }
+
+        if (predicates.size() != 0){
+            Predicate[] predicatesArray = predicates.stream().toArray(Predicate[]::new);
+            querry.where(predicatesArray);
+        }
+
 
         return querry;
     }

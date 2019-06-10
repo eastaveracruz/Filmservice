@@ -186,8 +186,8 @@ VALUES ('Film 01',
         'ACTION',
         '2015-05-30');
 
-INSERT INTO ratings (user_id, film_id, rating)
-VALUES (1, 1, 5),
-       (1, 2, 6),
-       (2, 1, 9),
-       (2, 2, 1);
+-- INSERT INTO ratings (user_id, film_id, rating)
+-- VALUES (1, 1, 5),
+--        (1, 2, 6),
+--        (2, 1, 9),
+--        (2, 2, 1);

@@ -1,6 +1,6 @@
 package filmservice.web.user;
 
-import filmservice.model.Role;
+import filmservice.model.util.Role;
 import filmservice.model.User;
 import filmservice.util.assertion.UserCreationHelper;
 import filmservice.web.AbstractControllerTest;

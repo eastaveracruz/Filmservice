@@ -33,9 +33,10 @@ CREATE TABLE films
   id          INTEGER PRIMARY KEY DEFAULT nextval('film_seq'),
   title       VARCHAR   NOT NULL,
   image       VARCHAR   NOT NULL,
-  description VARCHAR   NOT NULL,
+  description TEXT   NOT NULL,
   genre       VARCHAR   NOT NULL,
-  date        TIMESTAMP NOT NULL
+  date        TIMESTAMP NOT NULL,
+  rating      REAL DEFAULT (-1)
 );
 
 CREATE TABLE ratings

@@ -1,8 +1,7 @@
 package filmservice.service;
 
 import filmservice.model.Film;
-import filmservice.model.RatedFilm;
-import filmservice.model.Rating;
+import filmservice.model.util.GetParameters;
 import filmservice.model.util.Sort;
 import filmservice.repository.FilmRepository;
 import filmservice.util.exception.NotFoundException;
@@ -22,10 +21,7 @@ public class FilmServiceImpl implements FilmService {
     @Autowired
     private FilmRepository repository;
 
-
-
     @Override
-    @Transactional
     public Film create(Film film) {
         Assert.notNull(film, "film must be not null");
         return checkNotFoundWithId(repository.save(film), film.getId());
@@ -42,50 +38,23 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public RatedFilm getRatedFilm(int id) {
-        return new RatedFilm(get(id));
-    }
-
-    @Override
     public void update(Film film) {
         Assert.notNull(film, "film must be not null");
         checkNotFoundWithId(repository.save(film), film.getId());
     }
 
     @Override
-    public List<Film> getAll(int page, Sort sort) {
-        return repository.getAll(page, sort);
+    public List<Film> getAll(int page, GetParameters parameters) {
+        return repository.getAll(page, parameters);
     }
 
     @Override
-    public List<RatedFilm> getAllRatedFilm(int page, Sort sort) {
-        return getAll(page, sort).stream().map(RatedFilm::new).collect(Collectors.toList());
+    public List<Film> getByTitle(String title, int page, GetParameters parameters) {
+        return repository.getByTitle(title, page, parameters);
     }
 
     @Override
-    public List<Film> getByTitle(String title, int page, Sort sort) {
-        return repository.getByTitle(title, page, sort);
+    public int recordsCount(GetParameters parameters) {
+        return repository.recordsCount(parameters);
     }
-
-    @Override
-    public List<RatedFilm> getRatedFilmByTitle(String title, int page, Sort sort) {
-        return getByTitle(title, page, sort).stream().map(RatedFilm::new).collect(Collectors.toList());
-    }
-
-    @Override
-    public Rating save(Rating rating) {
-        Assert.notNull(rating, "rating must be not null");
-        return repository.save(rating);
-    }
-
-    @Override
-    public int recordsCount() {
-        return repository.recordsCount();
-    }
-
-    @Override
-    public int recordsCount(String title) {
-        return repository.recordsCount(title);
-    }
-
 }

@@ -22,9 +22,7 @@ public class Pagination {
         return query.getResultList();
     }
 
-    public static String generatePaginationBlock(int page, int numberOfRecords, Map<String, String> parameters) {
-
-        String stringParameters = parameters.size() == 0 ? "" : generateParametersString(parameters);
+    public static String generatePaginationBlock(int page, int numberOfRecords, String stringParameters) {
 
         int numberOfPage = numberOfRecords / maxResult;
         String result = "<ul class=pagination>";

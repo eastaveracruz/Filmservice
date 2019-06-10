@@ -1,26 +1,25 @@
 package filmservice.repository;
 
 import filmservice.model.Film;
-import filmservice.model.Rating;
-import filmservice.model.util.Sort;
+import filmservice.model.util.GetParameters;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface FilmRepository {
 
+    @Transactional
     Film save(Film film);
 
+    @Transactional
     boolean delete(int id);
 
     Film get(int id);
 
-    List<Film> getAll(int page, Sort sort);
+    List<Film> getAll(int page, GetParameters parameters);
 
-    List getByTitle(String title, int page, Sort sort);
+    List getByTitle(String title, int page, GetParameters parameters);
 
-    Rating save(Rating rating);
+    int recordsCount(GetParameters parameters);
 
-    int recordsCount();
-
-    int recordsCount(String title);
 }

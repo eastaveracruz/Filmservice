@@ -41,7 +41,7 @@ footer {
 }
 
 #search {
-    width: 400px;
+    width: 300px;
     margin: 0px;
     padding: 0px;
     display: flow;
@@ -162,6 +162,42 @@ A {
 }
 
 
+.assessment {
+    float: left;
+}
+
+.menu a {
+    padding: 7px 10px;
+}
+.menu a:hover {
+    background-color: #edf5f9;
+}
+.deleteEdit{
+    margin-top: 22px;
+}
+
+.yourAssessment{
+    color: indianred;
+    font-size: 15px;
+    font-family: "Comic Sans MS";
+}
+
+.hello {
+    color: indianred;
+}
+
+.vote{
+    color: indianred;
+    border: none;
+    background-color: white;
+    font-size: 16px;
+    padding: 7px 9px;
+}
+
+.vote:hover{
+    background-color: #edf5f9;
+
+}
 
 
 

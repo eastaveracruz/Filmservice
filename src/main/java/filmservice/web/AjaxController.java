@@ -1,7 +1,9 @@
 package filmservice.web;
 
+import filmservice.model.Film;
 import filmservice.model.Rating;
 import filmservice.service.FilmService;
+import filmservice.service.RatingService;
 import filmservice.service.SecurityService;
 import filmservice.web.user.AbstractUserController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,17 @@ public class AjaxController extends AbstractUserController {
     @Autowired
     private FilmService filmService;
 
+    @Autowired
+    private RatingService ratingService;
+
     @PostMapping(path = "/save/rating")
     public String saveRating(@RequestParam int filmId, @RequestParam int rating) {
 
+        /*Достаем у юзера его оценки*/
         Map<Integer, Rating> userRating = SecurityService.get().getUserRating();
         Rating filmRating = null;
+
+        /*Если оценка сущестует изменяем ее, иначе создаем новую*/
         if (userRating.containsKey(filmId)) {
             filmRating = userRating.get(filmId);
             filmRating.setRating(rating);
@@ -31,13 +39,23 @@ public class AjaxController extends AbstractUserController {
             int userId = SecurityService.getId();
             filmRating = new Rating(userId, filmId, rating);
         }
-        Rating newRating = filmService.save(filmRating);
+
+        /*Сохраняем оценку в базе*/
+        Rating newRating = ratingService.save(filmRating);
+
+        /*Обновляем среднюю оценку фильма*/
+        Film film = filmService.get(filmId);
+        double avgFilmRating = ratingService.getAvgFilmRating(filmId);
+        film.setRating(avgFilmRating);
+        filmService.update(film);
+
+        /*Отправляем клиенту ответ*/
         if (newRating != null) {
             userRating.put(filmId, newRating);
-            double avgRating = filmService.getRatedFilm(filmId).getAvgRating();
-            return String.format(Locale.ENGLISH, "{ \"scs\": true, \"rating\": %.1f}", avgRating);
+            return String.format(Locale.ENGLISH, "{ \"scs\": true, \"rating\": %.1f}", avgFilmRating);
         }
-        return "{scs: false}";
+
+        return "{ \"scs\": false }";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -1,5 +1,6 @@
 package filmservice.model;
 
+import filmservice.model.util.Role;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
@@ -45,49 +46,39 @@ public class User implements BaseEntity {
     @Transient
     private String confirmPassword;
 
-    public Map<Integer, Rating> getRating() {
-        return rating;
-    }
-
-    public void setRating(Map<Integer, Rating> rating) {
-        this.rating = rating;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public User() {
     }
 
-    public User(int id, String login, String password, Role role, Role... roles ) {
+    public User(int id, String login, String password, Role role, Role... roles) {
         this(login, password, EnumSet.of(role, roles));
         this.id = id;
     }
 
-    public User(String login, String password, Collection<Role> roles){
-        this.login = login;
-        this.password = password;
-        setRoles(roles);
-    }
-
-    public User(String login, String password, Role... roles){
+    public User(String login, String password, Role... roles) {
         this.login = login;
         this.password = password;
         this.roles = EnumSet.copyOf(Arrays.asList(roles));
     }
 
-
-    public Integer getId() {
-        return id;
+    public User(String login, String password, Collection<Role> roles) {
+        this.login = login;
+        this.password = password;
+        setRoles(roles);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public Integer getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+
+    }
+
+    @Override
+    public boolean isNew() {
+        return false;
     }
 
     public String getLogin() {
@@ -110,12 +101,28 @@ public class User implements BaseEntity {
         return roles;
     }
 
-    public boolean isNew() {
-        return this.id == null;
-    }
-
     public void setRoles(Collection<Role> roles) {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Map<Integer, Rating> getRating() {
+        return rating;
+    }
+
+    public void setRating(Map<Integer, Rating> rating) {
+        this.rating = rating;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     @Override
@@ -123,24 +130,26 @@ public class User implements BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id &&
+        return Objects.equals(id, user.id) &&
                 Objects.equals(login, user.login) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(roles, user.roles);
+                Objects.equals(roles, user.roles) &&
+                Objects.equals(rating, user.rating) &&
+                Objects.equals(confirmPassword, user.confirmPassword);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, roles);
+        return Objects.hash(id, login, password, roles, rating, confirmPassword);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
+                "login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", role=" + roles +
+                ", roles=" + roles +
+                ", rating=" + rating +
                 '}';
     }
 }
