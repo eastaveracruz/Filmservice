@@ -49,27 +49,25 @@ public class FilmRepositoryImpl implements FilmRepository {
     @Override
     @Transactional
     public List<Film> getAll(int page, GetParameters parameters) {
-        CriteriaQuery<Film> querry = querrySetting(parameters);
-        TypedQuery<Film> typedQuery = em.createQuery(querry);
+        TypedQuery<Film> typedQuery = querrySetting(parameters);
         return Pagination.getPaginatedResult(typedQuery, page);
     }
 
     @Override
     @Transactional
     public int recordsCount(GetParameters parameters) {
-        CriteriaQuery<Film> querry = querrySetting(parameters, "count");
-        TypedQuery typedQuery = em.createQuery(querry);
+        TypedQuery typedQuery = querrySetting(parameters, "count");
         Long result = (Long) typedQuery.getSingleResult();
         return result.intValue();
     }
 
-    private CriteriaQuery<Film> querrySetting(GetParameters parameters, String... args) {
+    private TypedQuery<Film> querrySetting(GetParameters parameters, String... args) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery querry;
         Root<Film> root;
         List<Predicate> predicates = new ArrayList<>();
 
-        /*Переключение между режимом выборки и счетчика*/
+        /*TODO Переключение между режимом выборки и счетчика*/
         if (args.length != 0 && args[0].equals("count")) {
             querry = cb.createQuery();
             root = querry.from(Film.class);
@@ -88,6 +86,8 @@ public class FilmRepositoryImpl implements FilmRepository {
                 case "desc":
                     querry.orderBy(cb.desc(root.get(sort.getString())));
                     break;
+                default:
+                    querry.orderBy(cb.asc(root.get("title")));
             }
         }
 
@@ -110,6 +110,12 @@ public class FilmRepositoryImpl implements FilmRepository {
                     .setParameter("userId", parameters.getUserId())
                     .getResultList();
 
+
+            /*TODO Если list пустой то predicates.add(root.get("id").in(list)) бросает эксепшен*/
+            if (list.size() == 0) {
+                list.add(-1);
+            }
+
             if (parameters.getAssessment()) {
                 predicates.add(root.get("id").in(list));
             } else {
@@ -117,11 +123,11 @@ public class FilmRepositoryImpl implements FilmRepository {
             }
         }
 
-        if (predicates.size() != 0){
+        if (predicates.size() != 0) {
             Predicate[] predicatesArray = predicates.stream().toArray(Predicate[]::new);
             querry.where(predicatesArray);
         }
 
-        return querry;
+        return em.createQuery(querry);
     }
 }
