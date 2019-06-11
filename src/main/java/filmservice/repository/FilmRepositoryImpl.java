@@ -94,7 +94,7 @@ public class FilmRepositoryImpl implements FilmRepository {
         /*Title*/
         if (parameters.isTitleExist()) {
             String title = parameters.getTitle();
-            querry.where(cb.like(root.get("title"), "%" + title + "%"));
+            querry.where(cb.like(cb.upper(root.get("title")), "%" + title.toUpperCase() + "%"));
         }
 
         /*Genre*/
