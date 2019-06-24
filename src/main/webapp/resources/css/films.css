@@ -123,7 +123,6 @@ A {
 .filmPage h2 {
     padding: 0 0 0 250px;
     font-size: 40px;
-    /*width: 60px;*/
 }
 
 .filmPage .info {
@@ -164,22 +163,22 @@ A {
 
 .assessment {
     float: left;
+    margin-top: 15px;
+}
+
+#hAssessment {
+    width: 47px;
 }
 
 .menu a {
-    padding: 7px 10px;
+    padding: 7px 9px;
 }
 .menu a:hover {
     background-color: #edf5f9;
 }
 .deleteEdit{
     margin-top: 22px;
-}
-
-.yourAssessment{
-    color: indianred;
-    font-size: 15px;
-    font-family: "Comic Sans MS";
+    text-align: left;
 }
 
 .hello {

@@ -9,10 +9,12 @@ $(".assessment").submit(function () {
         data: $(this).serialize(),
         success: function (data) {
             var resp = $.parseJSON(data);
-            if (resp.scs) {
-                var assessment = $("form[filmId=" + filmId + "] select").val();
-                $("span[yourAssessment=" + filmId + "]").text(assessment);
+            if (resp.scs && resp.rating > 0) {
+                // var assessment = $("form[filmId=" + filmId + "] select").val();
+                // $("span[yourAssessment=" + filmId + "]").text(assessment);
                 $("h2[filmId=" + filmId + "]").text(number_format(resp.rating, 1));
+            }else {
+                $("h2[filmId=" + filmId + "]").text("-");
             }
         }
     });
@@ -67,3 +69,4 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     }
     return s.join(dec);
 }
+

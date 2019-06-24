@@ -1,4 +1,4 @@
-rem set FILM_ROOT= d:\trainSpring2019\michael\Filmservice-master\
+rem set FILM_ROOT= d:\Filmservice-master\
 
 D:
 cd %FILM_ROOT%

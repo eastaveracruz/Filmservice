@@ -12,20 +12,20 @@
             <td>
                 <img class="filmImg" src="${film.image}">
                 <sec:authorize access="isAuthenticated()">
-                    <p class="yourAssessment">Ваша оценка - <span yourAssessment="${film.id}">${userRatingMap[film.id].rating}</span></p>
                     <form class="assessment" action="ajax/save/rating" method="post" filmId="${film.id}">
                         <input name="filmId" type="hidden" value="${film.id}">
                         <select name="rating">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
+                            <option value="0">-</option>
+                            <c:forEach begin="1" end="10" var="i">
+                                <c:choose>
+                                    <c:when test="${i == userRatingMap[film.id].rating}">
+                                        <option selected value="${i}">${i}</option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${i}">${i}</option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
                         </select>
                         <input type="submit" value="VOTE" class="vote">
                     </form>
@@ -43,8 +43,8 @@
                 <h6 class="genre">Date: ${fn:formatDateTime(film.date)}</h6>
                 <div class="description">${film.description}</div>
             </td>
-            <td>
-                <h2 filmId="${film.id}">
+            <td id="hAssessment">
+                <h2  filmId="${film.id}">
                         ${film.rating==-1?"-":film.rating}
                 </h2>
             </td>

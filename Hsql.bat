@@ -1,4 +1,4 @@
-set FILM_ROOT= d:\trainSpring2019\michael\Filmservice-master\
+rem set FILM_ROOT= d:\Filmservice-master\
 rem set CATALINA_HOME= c:\dev\tomcat\apache-tomcat-9.0.20\
 
 e:
