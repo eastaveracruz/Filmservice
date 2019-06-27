@@ -1,3 +1,9 @@
+Heroku
+
+https://filmservice.herokuapp.com/
+
+----------------------------------------------------------------------------------------------------
+
 Запуск на Postgresql
 username=root
 password=root
