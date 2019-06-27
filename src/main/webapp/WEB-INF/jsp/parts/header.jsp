@@ -20,7 +20,7 @@
 <body>${pageContext.request.getPathInfo()}
 <header>
     <div id="menu" class="menu">
-        <a href="${pageContext.request.contextPath}"><fmt:message key="app.home"/></a> |
+        <a href="./"><fmt:message key="app.home"/></a> |
         <sec:authorize access="hasRole('ROLE_ADMIN')">
             <a href="./add"><fmt:message key="app.addFilm"/></a> |
         </sec:authorize>
