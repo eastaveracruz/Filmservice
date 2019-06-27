@@ -62,22 +62,11 @@ public class RootController {
 
     @GetMapping("/{page}")
     public String films(@PathVariable Integer page,
-                        @RequestParam(required = false) String title,
-                        @RequestParam(required = false) String sort,
-                        @RequestParam(required = false) String genre,
-                        @RequestParam(required = false) String assessment,
+                        @ModelAttribute("getParameters") GetParameters parameters,
                         Model model) {
-
         List filmsList;
         int recordsCount;
-        Sort sortObj = Sort.init(sort);
-
-        GetParameters parameters = new GetParameters();
         parameters.setId(SecurityService.safeGet() != null ? SecurityService.getId() : null);
-        parameters.setAssessment(assessment);
-        parameters.setGenre(genre);
-        parameters.setSort(sortObj);
-        parameters.setTitle(title);
 
         recordsCount = filmService.recordsCount(parameters);
         page = Pagination.pageValid(page, recordsCount);
@@ -95,6 +84,7 @@ public class RootController {
         model.addAttribute("userList", userService.getAll());
         model.addAttribute("user", SecurityService.safeGet() != null ? SecurityService.safeGet().getName() : null);
         model.addAttribute("genre", Genre.values());
+        model.addAttribute("getParameters", parameters);
         return "films";
     }
 

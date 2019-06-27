@@ -6,29 +6,19 @@ public class GetParameters {
 
     private Integer userId;
     private String title;
-    private Sort sort;
-    private Genre genre;
-    private Boolean assessment;
-
-
+    private Sort sort = Sort.init(Sort.TITLE_ACS);
+    private String sortString;
+    private String genre;
+    private String assessment;
 
     public void setGenre(String genre) {
-        if (genre != null && !"".equals(genre)) {
+        if (genre != null && !"".equals(genre) && !genre.equals("-")) {
             for (Enum e : Genre.values()) {
-                if (e.equals(Genre.valueOf(genre))) {
-                    this.genre = Genre.valueOf(genre);
+                if (e.toString().equals(genre)) {
+                    this.genre = genre;
                     break;
                 }
             }
-        }
-    }
-
-    public void setAssessment(String assessment) {
-        try {
-            int i = Integer.parseInt(assessment);
-            this.assessment = i == 1;
-        } catch (Exception e) {
-            this.assessment = null;
         }
     }
 
@@ -54,12 +44,25 @@ public class GetParameters {
     }
 
 
-    public Genre getGenre() {
+    public String getGenre() {
         return genre;
     }
 
-    public Boolean getAssessment() {
+    public void setAssessment(String assessment) {
+        this.assessment = assessment;
+    }
+
+    public String getAssessment() {
         return assessment;
+    }
+
+    public Boolean getBooleanAssessment() {
+        try {
+            int i = Integer.parseInt(this.assessment);
+            return i == 1;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public String getTitle() {
@@ -71,22 +74,31 @@ public class GetParameters {
     }
 
     public boolean isAssessmentExist() {
-        return this.assessment != null;
+        return this.assessment != null && !this.assessment.isEmpty() && this.assessment != "-";
     }
 
     public boolean isTitleExist() {
         return !Strings.isNullOrEmpty(this.title);
     }
 
-    public boolean isUserIdExist(){
+    public boolean isUserIdExist() {
         return this.userId != null;
+    }
+
+    public String getSortString() {
+        return sortString;
+    }
+
+    public void setSortString(String sortString) {
+        this.sort = Sort.init(sortString);
+        this.sortString = sortString;
     }
 
     @Override
     public String toString() {
 
         StringBuilder result = new StringBuilder("?");
-        result.append("&sort=" + sort.getOriginalString());
+        result.append("sortString=" + sort.getOriginalString());
         if (isTitleExist()) {
             result.append("&title=" + getTitle());
         }

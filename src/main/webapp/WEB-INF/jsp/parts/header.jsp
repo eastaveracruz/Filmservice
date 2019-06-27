@@ -2,7 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <fmt:setBundle basename="messages.app"/>
+<c:set var="path" value="${pageContext.request.getRequestURL()}"/>
 
 <html>
 <head>
@@ -14,7 +17,7 @@
     <script type="text/javascript" src="webjars/jquery/3.3.1-2/jquery.js" defer></script>
     <script type="text/javascript" src="resources/js/film.js" defer></script>
 </head>
-<body>
+<body>${pageContext.request.getPathInfo()}
 <header>
     <div id="menu" class="menu">
         <a href="${pageContext.request.contextPath}"><fmt:message key="app.home"/></a> |
@@ -41,30 +44,32 @@
             <button type="submit"><fmt:message key="app.searchButton"/></button>
         </form>
     </div>
-    <div align="right" id="sort">
-        <form action="./1" method="get">
-            <sec:authorize access="isAuthenticated()">
-            <select name="assessment">
-                <option value="">-</option>
-                <option value="1">оценненные</option>
-                <option value="0">не оценненные</option>
-            </select>
-            </sec:authorize>.
-            <select name="genre">
-                <option value="">-</option>
-                <c:forEach items="${genre}" var="g">
-                    <option value="${g}">${g}</option>
-                </c:forEach>
-            </select>
-            <select name="sort">
-                <option value="title_asc">Title | ascending</option>
-                <option value="title_desc">Title | descending</option>
-                <option value="date_desc">Date | ascending</option>
-                <option value="datee_asc">Date | descending</option>
-                <option value="rating_desc">Rating | ascending</option>
-                <option value="rating_asc">Rating | descending</option>
-            </select>
-            <button type="submit">Filter</button>
-        </form>
-    </div>
+    <c:if test="${filmsList != null}">
+        <div align="right" id="sort">
+            <form:form method="get" action="./1" modelAttribute="getParameters">
+                <sec:authorize access="isAuthenticated()">
+                    <form:select path="assessment">
+                        <form:option value="">-</form:option>
+                        <form:option value="1">оценненные</form:option>
+                        <form:option value="0">не оценненные</form:option>
+                    </form:select>
+                </sec:authorize>
+                <form:select path="genre">
+                    <form:option value="-">-</form:option>
+                    <c:forEach items="${genre}" var="g">
+                        <form:option value="${g}">${g}</form:option>
+                    </c:forEach>
+                </form:select>
+                <form:select path="sortString">
+                    <form:option value="title_asc">Title | ascending</form:option>
+                    <form:option value="title_desc">Title | descending</form:option>
+                    <form:option value="date_desc">Date | ascending</form:option>
+                    <form:option value="date_asc">Date | descending</form:option>
+                    <form:option value="rating_desc">Rating | ascending</form:option>
+                    <form:option value="rating_asc">Rating | descending</form:option>
+                </form:select>
+                <button type="submit">Filter</button>
+            </form:form>
+        </div>
+    </c:if>
 </header>

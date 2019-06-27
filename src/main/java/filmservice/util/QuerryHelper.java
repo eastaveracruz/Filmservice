@@ -103,8 +103,8 @@ public class QuerryHelper<E> {
     }
 
     private void genreFilter() {
-        Genre genre = parameters.getGenre();
-        predicates.add(cb.equal(root.get("genre"), genre.name()));
+        String genre = parameters.getGenre();
+        predicates.add(cb.equal(root.get("genre"), genre));
     }
 
     private void assessmentFilter() {
@@ -116,12 +116,10 @@ public class QuerryHelper<E> {
         if (list.size() == 0) {
             list.add(-1);
         }
-
-        if (parameters.getAssessment()) {
+        if (parameters.getBooleanAssessment()) {
             predicates.add(root.get("id").in(list));
         } else {
             predicates.add(cb.not(root.get("id").in(list)));
         }
     }
-
 }
