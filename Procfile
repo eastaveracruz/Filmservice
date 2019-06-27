@@ -1,0 +1,1 @@
+web:    java $JAVA_OPTS -Dspring.profiles.active=heroku -DTOPJAVA_ROOT="postgres://gbmxcygkhwrgvu:f2c11df0a7fac6cccd0852d77e344e9d52986f6f67cbde1fc20b55554493385f@ec2-54-228-246-214.eu-west-1.compute.amazonaws.com:5432/de7d00mpaa0q94" -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
